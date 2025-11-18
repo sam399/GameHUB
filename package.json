@@ -1,4 +1,9 @@
 {
+  "private": true,
+  "workspaces": [
+    "gameverse/backend",
+    "gameverse/frontend"
+  ],
   "dependencies": {
     "bcryptjs": "^3.0.3",
     "cors": "^2.8.5",
