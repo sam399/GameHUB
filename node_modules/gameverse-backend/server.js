@@ -5,6 +5,9 @@ require('dotenv').config();
 
 const app = express();
 
+// Simple in-memory counter to track requests to /api (useful for quick verification)
+let apiPingCount = 0;
+
 // Middleware
 app.use(cors());
 app.use(express.json());
@@ -14,6 +17,8 @@ app.use('/api/auth', require('./routes/auth'));
 
 // Basic route
 app.get('/api', (req, res) => {
+  apiPingCount += 1;
+  console.log(`[${new Date().toISOString()}] GET /api (#${apiPingCount}) from ${req.ip || req.connection.remoteAddress}`);
   res.json({ 
     message: 'GameVerse API is running!',
     version: '1.0.0',
@@ -21,6 +26,11 @@ app.get('/api', (req, res) => {
       auth: '/api/auth'
     }
   });
+});
+
+// Endpoint to check how many times /api was requested (for quick verification)
+app.get('/api/pings', (req, res) => {
+  res.json({ pings: apiPingCount });
 });
 
 // MongoDB connection with in-memory fallback for local dev
