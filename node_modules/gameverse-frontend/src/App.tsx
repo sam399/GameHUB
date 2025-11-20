@@ -5,6 +5,9 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Profile from './pages/Profile';
 import './App.css';
+import GameLibrary from './pages/GameLibrary';
+import GameDetails from './pages/GameDetails';
+import Navbar from './components/Navbar';
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user, loading } = useAuth();
@@ -31,23 +34,23 @@ function AppContent() {
 
   return (
     <div className="App">
-      <header className="App-header">
-        <h1>🎮 GameVerse</h1>
-        <p>AI-Powered Gaming Community Platform</p>
-        {user && (
-          <nav>
-            <button onClick={logout}>Logout</button>
-          </nav>
-        )}
+      <Navbar />
+      <header className="App-header site-hero">
+        <div className="container">
+          <h1>🎮 GameVerse</h1>
+          <p className="hero-sub">AI-Powered Gaming Community Platform</p>
+          {user && (
+            <nav>
+              <button onClick={logout} className="btn-ghost">Logout</button>
+            </nav>
+          )}
+        </div>
       </header>
       
       <main>
         <Routes>
-          <Route path="/" element={
-            <ProtectedRoute>
-              <Profile />
-            </ProtectedRoute>
-          } />
+          <Route path="/" element={<GameLibrary />} />
+          <Route path="/games/:id" element={<GameDetails />} />
           <Route path="/profile" element={
             <ProtectedRoute>
               <Profile />
@@ -80,3 +83,4 @@ function App() {
 }
 
 export default App;
+ 

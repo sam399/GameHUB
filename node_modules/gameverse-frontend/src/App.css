@@ -212,3 +212,389 @@ nav button {
 nav button:hover {
   background: #c82333;
 }
+/* Game Library Styles */
+.game-library {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.library-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: white;
+}
+
+.library-header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.library-content {
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  gap: 2rem;
+}
+
+/* Game Filters */
+.game-filters {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.filter-section {
+  margin-bottom: 1.5rem;
+}
+
+.filter-section h4 {
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.filter-section input,
+.filter-section select {
+  width: 100%;
+  padding: 0.5rem;
+  border: 2px solid #ddd;
+  border-radius: 5px;
+  font-size: 0.9rem;
+}
+
+.clear-filters {
+  width: 100%;
+  background: #6c757d;
+  color: white;
+  border: none;
+  padding: 0.5rem;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.clear-filters:hover {
+  background: #5a6268;
+}
+
+/* Game Grid */
+.game-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.game-grid.loading {
+  opacity: 0.7;
+}
+
+/* Game Card */
+.game-card {
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.game-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.game-card a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.game-card-image {
+  position: relative;
+  height: 200px;
+  overflow: hidden;
+}
+
+.game-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s;
+}
+
+.game-card:hover .game-card-image img {
+  transform: scale(1.05);
+}
+
+.featured-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #ff6b6b;
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.game-card-content {
+  padding: 1rem;
+}
+
+.game-title {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin: 0 0 0.5rem 0;
+  color: #333;
+}
+
+.game-developer {
+  color: #666;
+  font-size: 0.9rem;
+  margin: 0 0 1rem 0;
+}
+
+.game-genres,
+.game-platforms {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.genre-tag,
+.platform-tag {
+  background: #e9ecef;
+  color: #495057;
+  padding: 0.25rem 0.5rem;
+  border-radius: 15px;
+  font-size: 0.8rem;
+}
+
+.game-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.game-rating .stars {
+  color: #ffc107;
+  font-size: 0.9rem;
+}
+
+.rating-text {
+  font-size: 0.8rem;
+  color: #666;
+  margin-left: 0.5rem;
+}
+
+.game-price {
+  font-weight: bold;
+  color: #28a745;
+}
+
+/* Game Details */
+.game-details {
+  max-width: 1200px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.game-hero {
+  position: relative;
+  height: 400px;
+  display: flex;
+  align-items: flex-end;
+  color: white;
+}
+
+.game-cover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+}
+
+.game-hero::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 70%;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+  z-index: 2;
+}
+
+.game-hero-content {
+  position: relative;
+  z-index: 3;
+  padding: 2rem;
+  width: 100%;
+}
+
+.game-hero-content h1 {
+  font-size: 3rem;
+  margin: 0 0 0.5rem 0;
+}
+
+.game-meta {
+  margin: 0 0 1rem 0;
+  opacity: 0.9;
+}
+
+.game-rating-large .stars {
+  color: #ffc107;
+  font-size: 1.2rem;
+}
+
+.game-price-large {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #28a745;
+  margin-top: 0.5rem;
+}
+
+.game-content {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+  padding: 2rem;
+}
+
+.game-description {
+  line-height: 1.6;
+  color: #333;
+}
+
+.game-screenshots {
+  margin-top: 2rem;
+}
+
+.screenshot-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.screenshot-grid img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.screenshot-grid img:hover {
+  transform: scale(1.05);
+}
+
+.info-card {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 10px;
+}
+
+.info-card h3 {
+  margin-top: 0;
+  color: #333;
+}
+
+.info-item {
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.info-item:last-child {
+  margin-bottom: 0;
+  border-bottom: none;
+}
+
+.info-item strong {
+  color: #333;
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.pagination button {
+  width: auto;
+  padding: 0.5rem 1rem;
+}
+
+.pagination button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+/* Skeleton Loading */
+.game-card-skeleton {
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.image-skeleton {
+  height: 200px;
+  background: #e9ecef;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.content-skeleton {
+  padding: 1rem;
+}
+
+.title-skeleton,
+.developer-skeleton,
+.tags-skeleton {
+  height: 1rem;
+  background: #e9ecef;
+  margin-bottom: 0.5rem;
+  border-radius: 3px;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.title-skeleton {
+  width: 80%;
+}
+
+.developer-skeleton {
+  width: 60%;
+}
+
+.tags-skeleton {
+  width: 40%;
+  height: 2rem;
+}
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+/* No Games */
+.no-games {
+  text-align: center;
+  padding: 3rem;
+  color: #666;
+}
+
+.no-games h3 {
+  margin-bottom: 0.5rem;
+}
