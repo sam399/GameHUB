@@ -8,6 +8,7 @@ import './App.css';
 import GameLibrary from './pages/GameLibrary';
 import GameDetails from './pages/GameDetails';
 import Navbar from './components/Navbar';
+import UserReviews from './pages/UserReviews';
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user, loading } = useAuth();
@@ -39,11 +40,7 @@ function AppContent() {
         <div className="container">
           <h1>🎮 GameVerse</h1>
           <p className="hero-sub">AI-Powered Gaming Community Platform</p>
-          {user && (
-            <nav>
-              <button onClick={logout} className="btn-ghost">Logout</button>
-            </nav>
-          )}
+          {/* hero content only; navigation is provided by Navbar */}
         </div>
       </header>
       
@@ -66,6 +63,11 @@ function AppContent() {
               <Register />
             </PublicRoute>
           } />
+          <Route path="/reviews" element={
+            <ProtectedRoute>
+              <UserReviews />
+            </ProtectedRoute>
+          } />
         </Routes>
       </main>
     </div>
@@ -83,4 +85,3 @@ function App() {
 }
 
 export default App;
- 

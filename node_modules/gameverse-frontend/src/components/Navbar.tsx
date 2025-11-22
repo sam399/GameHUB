@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { reviewService } from '../services/reviewService';
 
 const Navbar: React.FC = () => {
   const [open, setOpen] = useState(false);
@@ -9,6 +10,7 @@ const Navbar: React.FC = () => {
   const { user, logout } = useAuth();
 
   const close = () => setOpen(false);
+  const [myReviewsCount, setMyReviewsCount] = useState<number | null>(null);
 
   useEffect(() => {
     if (!open) return;
@@ -54,6 +56,26 @@ const Navbar: React.FC = () => {
     return () => document.removeEventListener('keydown', onKeyDown);
   }, [open]);
 
+  useEffect(() => {
+    let mounted = true;
+    const loadCount = async () => {
+      if (!user) {
+        setMyReviewsCount(null);
+        return;
+      }
+      try {
+        const resp = await reviewService.getUserReviews();
+        if (!mounted) return;
+        setMyReviewsCount(resp.data.reviews.length);
+      } catch (err) {
+        console.warn('Failed to load user reviews count', err);
+      }
+    };
+
+    loadCount();
+    return () => { mounted = false; };
+  }, [user]);
+
   // close menu when navigating (for links that call close)
   const handleLogout = async () => {
     try {
@@ -86,11 +108,32 @@ const Navbar: React.FC = () => {
           <Link to="/featured" className="nav-link" onClick={close}>Featured</Link>
           {user ? (
             <>
-              <Link to="/profile" className="nav-link" onClick={close}>Profile</Link>
-              <button className="nav-link" onClick={handleLogout}>Logout</button>
+              <Link to="/reviews" className="nav-link" onClick={close}>
+                My Reviews {typeof myReviewsCount === 'number' && (
+                  <span className="badge">{myReviewsCount}</span>
+                )}
+              </Link>
             </>
           ) : (
             <Link to="/login" className="nav-link small-muted" onClick={close}>Login</Link>
+          )}
+
+          {/* Desktop user menu (avatar + dropdown) */}
+          {user && (
+            <div className="user-menu">
+              <button className="user-avatar-btn" aria-haspopup="true" aria-expanded={open} onClick={() => setOpen((s) => !s)}>
+                {user.profile?.avatar ? (
+                  <img src={user.profile.avatar} alt={user.username} className="user-avatar" />
+                ) : (
+                  <div className="avatar-placeholder">{user.username.charAt(0).toUpperCase()}</div>
+                )}
+              </button>
+              <div className={`user-dropdown ${open ? 'open' : ''}`} role="menu">
+                <Link to="/profile" className="dropdown-item" onClick={close}>Profile</Link>
+                <Link to="/reviews" className="dropdown-item" onClick={close}>My Reviews</Link>
+                <button className="dropdown-item" onClick={handleLogout}>Logout</button>
+              </div>
+            </div>
           )}
         </nav>
       </div>

@@ -106,3 +106,59 @@ export interface GameFilters {
   sortBy?: string;
   sortOrder?: string;
 }
+// Add these to your existing types
+
+export interface Review {
+  _id: string;
+  user: {
+    _id: string;
+    username: string;
+    profile: {
+      avatar: string;
+    };
+  };
+  game: string | Game;
+  rating: number;
+  title: string;
+  content: string;
+  likes: string[];
+  dislikes: string[];
+  helpful: number;
+  isEdited: boolean;
+  editedAt?: string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ReviewStats {
+  totalReviews: number;
+  ratingDistribution: Array<{
+    rating: number;
+    count: number;
+    percentage: number;
+  }>;
+}
+
+export interface ReviewsResponse {
+  success: boolean;
+  data: {
+    reviews: Review[];
+    totalPages: number;
+    currentPage: number;
+    total: number;
+  };
+}
+
+export interface CreateReviewData {
+  rating: number;
+  title: string;
+  content: string;
+}
+
+export interface ReviewReaction {
+  likes: number;
+  dislikes: number;
+  helpful: number;
+  userReaction: 'like' | 'dislike' | 'none';
+}

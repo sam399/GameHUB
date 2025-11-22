@@ -1,6 +1,7 @@
 import React, { createContext, useState, useContext, useEffect, ReactNode } from 'react';
 import { User, LoginCredentials, RegisterCredentials } from '../types';
 import { authService } from '../services/authService';
+import { connectRealtime, disconnectRealtime } from '../services/realtime';
 
 interface AuthContextType {
   user: User | null;
@@ -52,16 +53,20 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const login = async (credentials: LoginCredentials) => {
     const response = await authService.login(credentials);
     setUser(response.data.user);
+    // connect realtime with token
+    try { connectRealtime(); } catch (err) { console.warn('Realtime connect after login failed', err); }
   };
 
   const register = async (credentials: RegisterCredentials) => {
     const response = await authService.register(credentials);
     setUser(response.data.user);
+    try { connectRealtime(); } catch (err) { console.warn('Realtime connect after register failed', err); }
   };
 
   const logout = () => {
     authService.logout();
     setUser(null);
+    try { disconnectRealtime(); } catch (err) { /* ignore */ }
   };
 
   const updateUser = (updatedUser: User) => {

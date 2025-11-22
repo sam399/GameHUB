@@ -22,6 +22,10 @@ if (fs.existsSync(__dirname + '/routes/games.js')) {
   app.use('/api/games', require('./routes/games'));
 }
 
+if (fs.existsSync(__dirname + '/routes/reviews.js')) {
+  app.use('/api/reviews', require('./routes/reviews'));
+}
+
 // Basic route
 app.get('/api', (req, res) => {
   apiPingCount += 1;
@@ -35,7 +39,17 @@ app.get('/api', (req, res) => {
     }
   });
 });
-
+app.get('/api', (req, res) => {
+  res.json({ 
+    message: 'GameVerse API is running!',
+    version: '1.0.0',
+    endpoints: {
+      auth: '/api/auth',
+      games: '/api/games',
+      reviews: '/api/reviews'
+    }
+  });
+});
 // Endpoint to check how many times /api was requested (for quick verification)
 app.get('/api/pings', (req, res) => {
   res.json({ pings: apiPingCount });
@@ -76,9 +90,52 @@ if (process.env.NODE_ENV !== 'production') {
   }
 }
 
-// Start server helper
+// Start server helper (create HTTP server and attach Socket.IO)
 const startServer = (port) => {
-  app.listen(port, () => {
+  const http = require('http');
+  const server = http.createServer(app);
+
+  // init socket.io
+  try {
+    const { Server } = require('socket.io');
+    const io = new Server(server, {
+      cors: {
+        origin: '*'
+      }
+    });
+    // expose io to controllers via realtime module
+    try {
+      const realtime = require('./realtime');
+      realtime.setIo(io);
+    } catch (err) {
+      console.warn('Realtime module not initialized:', err.message || err);
+    }
+
+    io.use((socket, next) => {
+      // Simple token auth for sockets. Expect token in handshake.auth.token
+      try {
+        const token = socket.handshake.auth && socket.handshake.auth.token;
+        if (!token) return next(); // allow unauthenticated connections for public events
+        const jwt = require('jsonwebtoken');
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        socket.userId = decoded.userId;
+        return next();
+      } catch (err) {
+        console.warn('Socket auth failed:', err && err.message ? err.message : err);
+        // disconnect unauthenticated sockets
+        return next();
+      }
+    });
+
+    io.on('connection', (socket) => {
+      console.log('Realtime client connected', socket.id, 'userId=', socket.userId || 'anon');
+      socket.on('disconnect', () => console.log('Realtime client disconnected', socket.id));
+    });
+  } catch (err) {
+    console.warn('Socket.IO not available:', err.message || err);
+  }
+
+  server.listen(port, () => {
     console.log(`🚀 Server is running on http://localhost:${port}`);
   });
 };

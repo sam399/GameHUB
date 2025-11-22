@@ -64,6 +64,17 @@ body {
 .nav-link { color: rgba(255,255,255,0.9); text-decoration: none; padding: 0.35rem 0.6rem; border-radius: 6px; font-size: 0.95rem; }
 .nav-link:hover { background: rgba(255,255,255,0.03); }
 .nav-link.small-muted { color: rgba(255,255,255,0.65); font-size:0.9rem }
+.badge { background: var(--accent); color: #fff; font-size: 0.72rem; padding: 0.08rem 0.35rem; border-radius: 999px; margin-left: 0.4rem; }
+
+/* User menu */
+.user-menu { position: relative; margin-left: 0.5rem; }
+.user-avatar-btn { background: transparent; border: none; cursor: pointer; display:flex; align-items:center; }
+.user-avatar { width:34px; height:34px; border-radius:50%; object-fit:cover }
+.avatar-placeholder { width:34px; height:34px; border-radius:50%; background:var(--accent); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700 }
+.user-dropdown { position:absolute; right:0; top:46px; background: linear-gradient(180deg, rgba(12,14,20,0.98), rgba(12,14,20,0.98)); border-radius:8px; padding:0.5rem; box-shadow:0 8px 20px rgba(2,6,23,0.6); display:none; min-width:160px }
+.user-dropdown.open { display:block }
+.dropdown-item { display:block; padding:0.45rem 0.6rem; color:rgba(255,255,255,0.95); text-decoration:none; border-radius:6px }
+.dropdown-item:hover { background: rgba(255,255,255,0.02) }
 
 /* Hero */
 .site-hero { text-align: left; color: rgba(255,255,255,0.95); }
