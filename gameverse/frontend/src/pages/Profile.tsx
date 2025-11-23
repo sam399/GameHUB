@@ -3,6 +3,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { Link } from 'react-router-dom';
 import { friendService } from '../services/friendService';
 import { Friend, FriendRequest } from '../types';
+import { useSocket } from '../contexts/SocketContext';
 
 const Profile: React.FC = () => {
   const { user } = useAuth();
@@ -11,6 +12,8 @@ const Profile: React.FC = () => {
     incoming: [],
     outgoing: []
   });
+  const [loading, setLoading] = useState(false);
+  const { refreshNotifications } = useSocket();
 
   useEffect(() => {
     if (user) {
@@ -20,6 +23,7 @@ const Profile: React.FC = () => {
 
   const loadFriendData = async () => {
     try {
+      setLoading(true);
       const [friendsResponse, requestsResponse] = await Promise.all([
         friendService.getFriends(),
         friendService.getFriendRequests()
@@ -29,6 +33,38 @@ const Profile: React.FC = () => {
       setFriendRequests(requestsResponse?.data || { incoming: [], outgoing: [] });
     } catch (error) {
       console.error('Error loading friend data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleAccept = async (requestId: string) => {
+    try {
+      await friendService.acceptFriendRequest(requestId);
+      await loadFriendData();
+      try { await refreshNotifications(); } catch (e) { /* ignore */ }
+    } catch (err) {
+      console.error('Failed to accept friend request', err);
+    }
+  };
+
+  const handleReject = async (requestId: string) => {
+    try {
+      await friendService.rejectFriendRequest(requestId);
+      await loadFriendData();
+      try { await refreshNotifications(); } catch (e) { /* ignore */ }
+    } catch (err) {
+      console.error('Failed to reject friend request', err);
+    }
+  };
+
+  const handleCancel = async (requestId: string) => {
+    try {
+      await friendService.cancelFriendRequest(requestId);
+      await loadFriendData();
+      try { await refreshNotifications(); } catch (e) { /* ignore */ }
+    } catch (err) {
+      console.error('Failed to cancel friend request', err);
     }
   };
 
@@ -65,6 +101,54 @@ const Profile: React.FC = () => {
           <div className="stat">
             <span className="stat-number">{friendRequests.incoming.length}</span>
             <span className="stat-label">Pending Requests</span>
+          </div>
+        </div>
+
+        <div className="profile-section">
+          <h3>Friend Requests</h3>
+          <div style={{ display: 'flex', gap: 20, marginBottom: 12 }}>
+            <div style={{ flex: 1 }}>
+              <h4>Incoming</h4>
+              {loading ? <div>Loading...</div> : (
+                friendRequests.incoming.length === 0 ? <div>No incoming requests</div> : (
+                  <div>
+                    {friendRequests.incoming.map(req => (
+                      <div key={req._id} style={{ display: 'flex', justifyContent: 'space-between', padding: 8, borderBottom: '1px solid #eee' }}>
+                        <div>
+                          <strong>{req.from?.username || 'Unknown'}</strong>
+                          <div style={{ fontSize: 12, color: '#666' }}>{req.createdAt ? new Date(req.createdAt).toLocaleString() : ''}</div>
+                        </div>
+                        <div style={{ display: 'flex', gap: 8 }}>
+                          <button onClick={async () => { await handleAccept(req._id); }} style={{ background: '#0b8', color: '#fff', border: 'none', padding: '6px 10px', borderRadius: 4 }}>Accept</button>
+                          <button onClick={async () => { await handleReject(req._id); }} style={{ background: '#eee', border: 'none', padding: '6px 10px', borderRadius: 4 }}>Reject</button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )
+              )}
+            </div>
+
+            <div style={{ flex: 1 }}>
+              <h4>Outgoing</h4>
+              {loading ? <div>Loading...</div> : (
+                friendRequests.outgoing.length === 0 ? <div>No outgoing requests</div> : (
+                  <div>
+                    {friendRequests.outgoing.map(req => (
+                      <div key={req._id} style={{ display: 'flex', justifyContent: 'space-between', padding: 8, borderBottom: '1px solid #eee' }}>
+                        <div>
+                          <strong>{req.to?.username || 'Unknown'}</strong>
+                          <div style={{ fontSize: 12, color: '#666' }}>{req.createdAt ? new Date(req.createdAt).toLocaleString() : ''}</div>
+                        </div>
+                        <div>
+                          <button onClick={async () => { await handleCancel(req._id); }} style={{ background: '#f66', color: '#fff', border: 'none', padding: '6px 10px', borderRadius: 4 }}>Cancel</button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )
+              )}
+            </div>
           </div>
         </div>
 
