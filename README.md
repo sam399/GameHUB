@@ -84,9 +84,4 @@ Want to run both servers together?
 
 - Use a process manager (tmux, Windows Terminal panes) or add an orchestration script (e.g., `concurrently` or `npm-run-all`) to the workspace `package.json`.
 
-If you'd like, I can:
-
-- Add a `dev` script at the workspace level to start both servers concurrently.
-- Run the TypeScript checks and a quick smoke test now.
-
 Enjoy building!
