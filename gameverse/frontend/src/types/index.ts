@@ -162,3 +162,84 @@ export interface ReviewReaction {
   helpful: number;
   userReaction: 'like' | 'dislike' | 'none';
 }
+// Add these to your existing types
+
+export interface ForumCategory {
+  _id: string;
+  name: string;
+  description: string;
+  color: string;
+  icon: string;
+  order: number;
+  isActive: boolean;
+  threadCount: number;
+  postCount: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ForumThread {
+  _id: string;
+  title: string;
+  content: string;
+  category: ForumCategory | string;
+  author: User;
+  isPinned: boolean;
+  isLocked: boolean;
+  views: number;
+  postCount: number;
+  lastPost?: {
+    author: User;
+    date: string;
+  };
+  tags: string[];
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ForumPost {
+  _id: string;
+  content: string;
+  thread: string | ForumThread;
+  author: User;
+  parentPost?: ForumPost;
+  likes: string[];
+  isEdited: boolean;
+  editedAt?: string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ForumThreadsResponse {
+  success: boolean;
+  data: {
+    threads: ForumThread[];
+    totalPages: number;
+    currentPage: number;
+    total: number;
+  };
+}
+
+export interface ForumThreadResponse {
+  success: boolean;
+  data: {
+    thread: ForumThread;
+    posts: ForumPost[];
+    totalPages: number;
+    currentPage: number;
+    total: number;
+  };
+}
+
+export interface CreateThreadData {
+  title: string;
+  content: string;
+  tags?: string[];
+}
+
+export interface CreatePostData {
+  content: string;
+  parentPost?: string;
+}

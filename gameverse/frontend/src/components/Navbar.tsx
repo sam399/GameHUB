@@ -108,6 +108,7 @@ const Navbar: React.FC = () => {
           <Link to="/featured" className="nav-link" onClick={close}>Featured</Link>
           {user ? (
             <>
+              <Link to="/forum" className="nav-link" onClick={close}>Forum</Link>
               <Link to="/reviews" className="nav-link" onClick={close}>
                 My Reviews {typeof myReviewsCount === 'number' && (
                   <span className="badge">{myReviewsCount}</span>

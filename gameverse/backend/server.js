@@ -12,7 +12,7 @@ let apiPingCount = 0;
 // Middleware
 app.use(cors());
 app.use(express.json());
-
+app.use('/api/forum', require('./routes/forum'));
 // Attach routes if they exist
 if (fs.existsSync(__dirname + '/routes/auth.js')) {
   app.use('/api/auth', require('./routes/auth'));
@@ -47,6 +47,18 @@ app.get('/api', (req, res) => {
       auth: '/api/auth',
       games: '/api/games',
       reviews: '/api/reviews'
+    }
+  });
+});
+app.get('/api', (req, res) => {
+  res.json({ 
+    message: 'GameVerse API is running!',
+    version: '1.0.0',
+    endpoints: {
+      auth: '/api/auth',
+      games: '/api/games',
+      reviews: '/api/reviews',
+      forum: '/api/forum'
     }
   });
 });

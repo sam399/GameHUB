@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, Link } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -9,6 +9,8 @@ import GameLibrary from './pages/GameLibrary';
 import GameDetails from './pages/GameDetails';
 import Navbar from './components/Navbar';
 import UserReviews from './pages/UserReviews';
+import ForumHome from './pages/ForumHome';
+import ForumCategoryPage from './pages/ForumCategory';
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user, loading } = useAuth();
@@ -68,6 +70,14 @@ function AppContent() {
               <UserReviews />
             </ProtectedRoute>
           } />
+          <Route path="/forum" element={<ProtectedRoute><ForumHome />
+              </ProtectedRoute>
+          } />
+          <Route path="/forum/category/:categoryId" element={
+              <ProtectedRoute>
+                <ForumCategoryPage />
+              </ProtectedRoute>
+          } />
         </Routes>
       </main>
     </div>
@@ -85,3 +95,4 @@ function App() {
 }
 
 export default App;
+
