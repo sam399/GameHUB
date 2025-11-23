@@ -309,3 +309,60 @@ export interface TypingUser {
   isTyping: boolean;
   username: string;
 }
+// Add these to your existing types
+
+export interface Friend {
+  user: User;
+  since: string;
+}
+
+export interface FriendRequest {
+  _id: string;
+  from: User;
+  to: User;
+  status: 'pending' | 'accepted' | 'rejected';
+  createdAt: string;
+}
+
+export interface FriendshipStatus {
+  isFriend: boolean;
+  hasPendingRequest: boolean;
+  incomingRequest: string | null;
+  outgoingRequest: string | null;
+}
+
+export interface UserWithFriendship extends User {
+  friendshipStatus: FriendshipStatus;
+}
+
+export interface FriendsResponse {
+  success: boolean;
+  data: {
+    friends: Friend[];
+  };
+}
+
+export interface FriendRequestsResponse {
+  success: boolean;
+  data: {
+    incoming: FriendRequest[];
+    outgoing: FriendRequest[];
+  };
+}
+
+export interface UsersSearchResponse {
+  success: boolean;
+  data: {
+    users: UserWithFriendship[];
+    totalPages: number;
+    currentPage: number;
+    total: number;
+  };
+}
+
+export interface FriendSuggestionsResponse {
+  success: boolean;
+  data: {
+    suggestions: User[];
+  };
+}

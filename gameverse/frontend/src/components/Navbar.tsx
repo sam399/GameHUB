@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { reviewService } from '../services/reviewService';
+import Notifications from './notifications/Notifications';
 
 const Navbar: React.FC = () => {
   const [open, setOpen] = useState(false);
@@ -114,6 +115,9 @@ const Navbar: React.FC = () => {
                   <span className="badge">{myReviewsCount}</span>
                 )}
               </Link>
+              <div style={{ display: 'inline-flex', alignItems: 'center', marginLeft: 10 }}>
+                <Notifications />
+              </div>
             </>
           ) : (
             <Link to="/login" className="nav-link small-muted" onClick={close}>Login</Link>

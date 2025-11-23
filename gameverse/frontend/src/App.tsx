@@ -8,11 +8,13 @@ import './App.css';
 import GameLibrary from './pages/GameLibrary';
 import GameDetails from './pages/GameDetails';
 import Navbar from './components/Navbar';
+import Toasts from './components/notifications/Toasts';
 import UserReviews from './pages/UserReviews';
 import ForumHome from './pages/ForumHome';
 import ForumCategoryPage from './pages/ForumCategory';
 import { SocketProvider } from './contexts/SocketContext';
 import ChatPage from './pages/Chat';
+import Friends from './pages/Friends';
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user, loading } = useAuth();
@@ -40,6 +42,7 @@ function AppContent() {
   return (
     <div className="App">
       <Navbar />
+      <Toasts />
       <header className="App-header site-hero">
         <div className="container">
           <h1>🎮 GameVerse</h1>
@@ -80,6 +83,16 @@ function AppContent() {
                 <ForumCategoryPage />
               </ProtectedRoute>
           } />
+          <Route path="/friends" element={
+              <ProtectedRoute>
+                <Friends />
+              </ProtectedRoute>
+          } />
+          <Route path="/chat" element={
+            <ProtectedRoute>
+              <ChatPage />
+            </ProtectedRoute>
+          } />
         </Routes>
       </main>
     </div>
@@ -97,13 +110,4 @@ function App() {
     </Router>
   );
 }
-
-// Add the chat route
-<Route path="/chat" element={
-  <ProtectedRoute>
-    <ChatPage />
-  </ProtectedRoute>
-} />
-
-export default App;
-
+    export default App;

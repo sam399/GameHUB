@@ -2,11 +2,14 @@ import React, { createContext, useContext, useEffect, useState, ReactNode } from
 import { io, Socket } from 'socket.io-client';
 import { useAuth } from './AuthContext';
 import { Message, TypingUser } from '../types';
+import { notificationService } from '../services/notificationService';
 
 interface SocketContextType {
   socket: Socket | null;
   isConnected: boolean;
   typingUsers: Map<string, TypingUser>;
+  notifications: Array<{ type: string; payload: any; timestamp?: string; _id?: string; read?: boolean }>;
+  refreshNotifications: () => Promise<void>;
   sendMessage: (chatId: string, message: Message) => void;
   joinChat: (chatId: string) => void;
   leaveChat: (chatId: string) => void;
@@ -34,6 +37,17 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
   const [socket, setSocket] = useState<Socket | null>(null);
   const [isConnected, setIsConnected] = useState(false);
   const [typingUsers, setTypingUsers] = useState<Map<string, TypingUser>>(new Map());
+  const [notifications, setNotifications] = useState<Array<{ type: string; payload: any; timestamp?: string; _id?: string; read?: boolean }>>([]);
+
+  const refreshNotifications = async () => {
+    try {
+      const resp = await notificationService.getNotifications();
+      const list = resp?.notifications || resp?.data?.notifications || resp;
+      setNotifications((list || []).map((n: any) => ({ ...n })));
+    } catch (err) {
+      console.warn('Failed to refresh notifications:', err);
+    }
+  };
 
   useEffect(() => {
     if (user) {
@@ -94,8 +108,38 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
 
     socket.on('user_typing', handleUserTyping);
 
+    // Friend / social notifications: fetch persisted notifications when events happen
+    const handleFriendRequest = (data: any) => {
+      refreshNotifications();
+      console.log('Friend request received via socket', data);
+    };
+
+    const handleFriendAccepted = (data: any) => {
+      refreshNotifications();
+      console.log('Friend request accepted via socket', data);
+    };
+
+    const handleFriendCancelled = (data: any) => {
+      refreshNotifications();
+      console.log('Friend request cancelled via socket', data);
+    };
+
+    const handleFriendRemoved = (data: any) => {
+      refreshNotifications();
+      console.log('Friend removed via socket', data);
+    };
+
+    socket.on('friend_request:received', handleFriendRequest);
+    socket.on('friend_request:accepted', handleFriendAccepted);
+    socket.on('friend_request:cancelled', handleFriendCancelled);
+    socket.on('friend:removed', handleFriendRemoved);
+
     return () => {
       socket.off('user_typing', handleUserTyping);
+      socket.off('friend_request:received', handleFriendRequest);
+      socket.off('friend_request:accepted', handleFriendAccepted);
+      socket.off('friend_request:cancelled', handleFriendCancelled);
+      socket.off('friend:removed', handleFriendRemoved);
     };
   }, [socket]);
 
@@ -152,6 +196,8 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
     socket,
     isConnected,
     typingUsers,
+    notifications,
+    refreshNotifications,
     sendMessage,
     joinChat,
     leaveChat,
