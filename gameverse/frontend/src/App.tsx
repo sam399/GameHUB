@@ -11,6 +11,8 @@ import Navbar from './components/Navbar';
 import UserReviews from './pages/UserReviews';
 import ForumHome from './pages/ForumHome';
 import ForumCategoryPage from './pages/ForumCategory';
+import { SocketProvider } from './contexts/SocketContext';
+import ChatPage from './pages/Chat';
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user, loading } = useAuth();
@@ -88,11 +90,20 @@ function App() {
   return (
     <Router>
       <AuthProvider>
-        <AppContent />
+        <SocketProvider>
+          <AppContent />
+        </SocketProvider>
       </AuthProvider>
     </Router>
   );
 }
+
+// Add the chat route
+<Route path="/chat" element={
+  <ProtectedRoute>
+    <ChatPage />
+  </ProtectedRoute>
+} />
 
 export default App;
 

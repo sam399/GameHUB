@@ -243,3 +243,69 @@ export interface CreatePostData {
   content: string;
   parentPost?: string;
 }
+// Add these to your existing types
+
+export interface Chat {
+  _id: string;
+  name?: string;
+  isGroupChat: boolean;
+  participants: User[];
+  groupAdmin?: User;
+  lastMessage?: Message;
+  avatar?: string;
+  displayName: string;
+  displayAvatar: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Message {
+  _id: string;
+  sender: User;
+  content: string;
+  chat: string | Chat;
+  readBy: Array<{
+    user: string | User;
+    readAt: string;
+  }>;
+  messageType: 'text' | 'image' | 'file' | 'system';
+  attachments?: Array<{
+    url: string;
+    filename: string;
+    fileType: string;
+    fileSize: number;
+  }>;
+  replyTo?: Message;
+  isEdited: boolean;
+  editedAt?: string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface MessagesResponse {
+  success: boolean;
+  data: {
+    messages: Message[];
+    totalPages: number;
+    currentPage: number;
+    total: number;
+  };
+}
+
+export interface CreateMessageData {
+  content: string;
+  replyTo?: string;
+}
+
+export interface SocketMessageData {
+  chatId: string;
+  message: Message;
+  sender: User;
+}
+
+export interface TypingUser {
+  userId: string;
+  isTyping: boolean;
+  username: string;
+}
