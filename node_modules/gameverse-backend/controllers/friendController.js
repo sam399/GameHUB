@@ -2,7 +2,7 @@ const User = require('../models/User');
 const mongoose = require('mongoose');
 const realtime = require('../realtime');
 const Notification = require('../models/Notification');
-
+const { notificationFactory } = require('./notificationController');
 // @desc    Send friend request
 // @route   POST /api/friends/requests
 // @access  Private
@@ -100,22 +100,9 @@ exports.sendFriendRequest = async (req, res) => {
       }
     });
 
-    // Persist notification and emit realtime notification to the recipient
+    // Persist notification and emit realtime notification to the recipient via factory
     try {
-      const sender = {
-        _id: currentUser._id,
-        username: currentUser.username,
-        profile: currentUser.profile
-      };
-
-      // create notification document for recipient (include requestId)
-      await Notification.create({
-        user: toUserId,
-        type: 'friend_request:received',
-        payload: { from: sender, requestId: requestId.toString() }
-      });
-
-      realtime.emitTo(`user_${toUserId}`, 'friend_request:received', { from: sender, requestId: requestId.toString() });
+      await notificationFactory.createFriendRequestNotification(req.userId, toUserId, { requestId: requestId.toString() });
     } catch (err) {
       console.error('Realtime notification error (sendFriendRequest):', err);
     }
@@ -206,27 +193,9 @@ exports.acceptFriendRequest = async (req, res) => {
       }
     });
 
-    // Persist and emit realtime notifications to both users
+    // Persist and emit realtime notification to the requester via factory
     try {
-      const accepter = await User.findById(req.userId).select('username profile');
-      const requester = await User.findById(fromUserId).select('username profile');
-
-      // create notification for requester
-      await Notification.create({
-        user: fromUserId,
-        type: 'friend_request:accepted',
-        payload: { by: { _id: accepter._id, username: accepter.username, profile: accepter.profile } }
-      });
-
-      // create notification for accepter (optional mirror)
-      await Notification.create({
-        user: req.userId,
-        type: 'friend_request:accepted',
-        payload: { of: { _id: requester._id, username: requester.username, profile: requester.profile } }
-      });
-
-      realtime.emitTo(`user_${fromUserId}`, 'friend_request:accepted', { by: { _id: accepter._id, username: accepter.username, profile: accepter.profile } });
-      realtime.emitTo(`user_${req.userId}`, 'friend_request:accepted', { of: { _id: requester._id, username: requester.username, profile: requester.profile } });
+      await notificationFactory.createFriendRequestAcceptedNotification(req.userId, fromUserId);
     } catch (err) {
       console.error('Realtime notification error (acceptFriendRequest):', err);
     }
@@ -357,14 +326,9 @@ exports.cancelFriendRequest = async (req, res) => {
       }
     });
 
-    // Persist notification and emit realtime notification to the recipient that request was cancelled
+    // Persist and emit cancelled notification via factory
     try {
-      await Notification.create({
-        user: toUserId,
-        type: 'friend_request:cancelled',
-        payload: { by: { _id: req.userId } }
-      });
-      realtime.emitTo(`user_${toUserId}`, 'friend_request:cancelled', { by: { _id: req.userId } });
+      await notificationFactory.createFriendRequestCancelledNotification(toUserId, req.userId);
     } catch (err) {
       console.error('Realtime notification error (cancelFriendRequest):', err);
     }
@@ -444,14 +408,9 @@ exports.removeFriend = async (req, res) => {
       }
     });
 
-    // Persist and emit realtime notification to the removed friend that they've been unfriended
+    // Persist and emit friend-removed notification via factory
     try {
-      await Notification.create({
-        user: friendId,
-        type: 'friend:removed',
-        payload: { by: { _id: req.userId } }
-      });
-      realtime.emitTo(`user_${friendId}`, 'friend:removed', { by: { _id: req.userId } });
+      await notificationFactory.createFriendRemovedNotification(friendId, req.userId);
     } catch (err) {
       console.error('Realtime notification error (removeFriend):', err);
     }

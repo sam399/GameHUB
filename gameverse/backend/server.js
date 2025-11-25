@@ -16,6 +16,10 @@ const io = socketio(server, {
   }
 });
 
+// Initialize realtime helper with io instance
+const realtime = require('./realtime');
+realtime.setIo(io);
+
 // Middleware
 app.use(cors());
 app.use(express.json());
@@ -152,4 +156,23 @@ mongoose.connect(MONGODB_URI, {
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
   console.log(`🚀 Server is running on http://localhost:${PORT}`);
+});
+// Add this after other route imports
+app.use('/api/notifications', require('./routes/notifications'));
+
+// Update the basic route to show new endpoints
+app.get('/api', (req, res) => {
+  res.json({ 
+    message: 'GameVerse API is running!',
+    version: '1.0.0',
+    endpoints: {
+      auth: '/api/auth',
+      games: '/api/games',
+      reviews: '/api/reviews',
+      forum: '/api/forum',
+      chats: '/api/chats',
+      friends: '/api/friends',
+      notifications: '/api/notifications'
+    }
+  });
 });

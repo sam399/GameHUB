@@ -366,3 +366,46 @@ export interface FriendSuggestionsResponse {
     suggestions: User[];
   };
 }
+// Add these to your existing types
+
+export interface Notification {
+  _id: string;
+  user: string;
+  type: 'friend_request' | 'friend_request_accepted' | 'new_message' | 'forum_reply' | 'forum_mention' | 'game_recommendation' | 'event_reminder' | 'system_alert';
+  title: string;
+  message: string;
+  data: {
+    senderId?: User;
+    chatId?: string;
+    threadId?: string;
+    postId?: string;
+    gameId?: string;
+    eventId?: string;
+    customData?: any;
+  };
+  isRead: boolean;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface NotificationsResponse {
+  success: boolean;
+  data: {
+    notifications: Notification[];
+    totalPages: number;
+    currentPage: number;
+    total: number;
+    unreadCount: number;
+  };
+}
+
+export interface NotificationStats {
+  unreadCount: number;
+  todayCount: number;
+  totalCount: number;
+  typeStats: Array<{
+    _id: string;
+    count: number;
+  }>;
+}

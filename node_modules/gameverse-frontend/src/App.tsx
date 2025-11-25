@@ -15,7 +15,9 @@ import ForumCategoryPage from './pages/ForumCategory';
 import { SocketProvider } from './contexts/SocketContext';
 import ChatPage from './pages/Chat';
 import Friends from './pages/Friends';
-
+import { NotificationProvider } from './contexts/NotificationContext';
+import Notifications from './pages/Notifications';
+import NotificationBell from './components/notifications/NotificationBell';
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user, loading } = useAuth();
   
@@ -93,6 +95,11 @@ function AppContent() {
               <ChatPage />
             </ProtectedRoute>
           } />
+          <Route path="/notifications" element={
+            <ProtectedRoute>
+              <Notifications />
+            </ProtectedRoute>
+          } />
         </Routes>
       </main>
     </div>
@@ -104,10 +111,13 @@ function App() {
     <Router>
       <AuthProvider>
         <SocketProvider>
-          <AppContent />
+          <NotificationProvider>
+            <AppContent />
+          </NotificationProvider>
         </SocketProvider>
       </AuthProvider>
     </Router>
   );
 }
-    export default App;
+export default App;
+

@@ -1,7 +1,7 @@
 const Chat = require('../models/Chat');
 const Message = require('../models/Message');
 const User = require('../models/User');
-
+const { notificationFactory } = require('./notificationController');
 // @desc    Get user's chats
 // @route   GET /api/chats
 // @access  Private
@@ -372,5 +372,32 @@ exports.searchUsers = async (req, res) => {
       message: 'Server error while searching users',
       error: error.message
     });
+  }
+};exports.sendMessage = async (req, res) => {
+  try {
+    // ... existing code ...
+
+    // Get chat participants excluding sender
+    const chat = await Chat.findById(chatId).populate('participants');
+    const recipients = chat.participants.filter(
+      participant => participant._id.toString() !== req.userId
+    );
+
+    // Send notifications to all recipients
+    for (const recipient of recipients) {
+      await notificationFactory.createNewMessageNotification(
+        recipient._id,
+        chatId,
+        req.userId
+      );
+    }
+
+    res.status(201).json({
+      success: true,
+      message: 'Message sent successfully',
+      data: { message }
+    });
+  } catch (error) {
+    // ... existing error handling ...
   }
 };
