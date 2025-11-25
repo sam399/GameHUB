@@ -7,6 +7,16 @@ GameVerse is a small demo (frontend + backend) for a gaming community platform. 
 - Friend requests with realtime updates
 - A Vite + React TypeScript frontend and an Express + Mongoose backend
 
+Additional features added recently:
+
+- Centralized notification factory (backend) that persists notifications and emits them to per-user socket rooms.
+- Admin area with realtime dashboard, users, reports, audit logs, and moderation tools (frontend + backend).
+- Audit logging (`AuditLog`) for important admin and moderation actions (report creation, assignment, resolution, friend request events, wishlist privacy changes, bulk moderation).
+- Wishlist privacy toggle (frontend component + API) to make wishlists public/private and a public wishlist route.
+- Admin realtime events: server emits `report.created`, `report.assigned`, `report.resolved` to connected admins in `admin_room` so dashboards update live.
+- Playwright smoke tests for quick end-to-end checks (frontend/tests).
+- Small admin UI: side-menu layout, assign/resolve controls for reports, and simple admin pages scaffolded.
+
 ## Quick Start
 
 Prerequisites
@@ -19,6 +29,9 @@ Important environment variables (backend)
 - `PORT` (default: `5000`)
 - `MONGODB_URI` (MongoDB connection string)
 - `JWT_SECRET` (used to sign auth tokens)
+
+Optional / useful env vars
+- `FRONTEND_URL` or `VITE_API_URL` — base url used by the frontend (Socket.IO client) when not running on localhost:5000.
 
 Create a `.env` file in `gameverse/backend` with the values above. Example:
 
@@ -46,6 +59,17 @@ npm run dev
 # Open the app (Vite may pick an alternate port), e.g. http://127.0.0.1:5173/ or the port shown by Vite
 ```
 
+Create or promote an admin user (convenience script)
+
+We added a helper script to create or promote an admin user:
+
+```powershell
+cd "H:\My Website\GameHUB\gameverse\backend"
+node .\scripts\createAdmin.js admin@example.com 123456789 adminuser
+```
+
+The script will promote an existing user with that email to `admin` or create a new admin user if none exists.
+
 Notes about dev environment
 
 - The frontend expects the backend at `http://localhost:5000` by default. Vite uses `import.meta.env.VITE_API_URL` for Socket.IO connections — set `VITE_API_URL` in `frontend/.env` if your backend runs elsewhere.
@@ -58,6 +82,20 @@ Key API endpoints
 - `GET /api/friends` — get friends list (protected)
 - `GET /api/friends/requests` — get incoming/outgoing friend requests (protected)
 - Friend request actions: `POST /api/friends/requests`, `PUT /api/friends/requests/:id/accept`, `PUT /api/friends/requests/:id/reject`, `DELETE /api/friends/requests/:id`
+
+Admin & moderation endpoints (examples)
+- `GET /api/admin/dashboard` — admin dashboard statistics (admin only)
+- `GET /api/admin/users` — list users (admin only)
+- `PUT /api/admin/users/:userId` — update user role/status (admin only)
+- `GET /api/admin/reports` — list reports (admin only)
+- `PUT /api/admin/reports/:reportId/assign` — assign report to moderator (admin only)
+- `PUT /api/admin/reports/:reportId/resolve` — resolve a report (admin only)
+- `GET /api/admin/audit-logs` — fetch audit logs (admin only)
+
+Wishlist endpoints
+- `GET /api/wishlist` — user's wishlist
+- `PUT /api/wishlist/privacy` — toggle wishlist public/private
+- `GET /api/wishlist/user/:userId` — view a public wishlist by user id
 
 Realtime events (Socket.IO)
 
@@ -75,10 +113,29 @@ npx tsc --noEmit
 
 -- There's a lightweight smoke-test script for sockets at `frontend/scripts/socketSmokeTest.js` to simulate two clients — useful while backend + frontend are running.
 
+Playwright smoke tests
+----------------------
+We added a minimal Playwright setup and a smoke test to quickly validate the frontend server and routing. To run:
+
+```powershell
+cd "H:\My Website\GameHUB\gameverse\frontend"
+npm install
+npx playwright install
+npm run test:e2e
+```
+
+The tests check the homepage, login page, and that unauthenticated admin routes redirect to login. Expand the tests to cover authenticated admin flows as needed.
+
 Troubleshooting
 
 - If you see `ECONNREFUSED` in the frontend, confirm the backend is running and reachable at the configured URL/port.
 - If Vite reports `Port 5173 in use` it will try another port; open the URL printed by Vite.
+
+Admin UI notes
+- The frontend includes a simple admin area at `/admin/*` (Dashboard, Users, Reports, Audit Logs, Moderation). Only users with `role: 'admin'` or `role: 'moderator'` can access these routes.
+- Admin clients join an `admin_room` socket on connect so server-side realtime events (report.created/assigned/resolved) are delivered to them.
+- The admin reports page includes quick Assign/Resolve actions (prompt-based). These call the admin APIs and trigger audit logs and realtime events.
+
 
 Want to run both servers together?
 
