@@ -32,6 +32,8 @@ app.use('/api/forum', require('./routes/forum'));
 app.use('/api/chats', require('./routes/chats'));
 app.use('/api/notifications', require('./routes/notifications'));
 app.use('/api/friends', require('./routes/friends'));
+app.use('/api/wishlist', require('./routes/wishlist'));
+app.use('/api/library', require('./routes/library'));
 // Basic route
 app.get('/api', (req, res) => {
   res.json({ 
@@ -43,7 +45,10 @@ app.get('/api', (req, res) => {
       reviews: '/api/reviews',
       forum: '/api/forum',
       chats: '/api/chats',
-      friends: '/api/friends'
+      friends: '/api/friends',
+      notifications: '/api/notifications',
+      wishlist: '/api/wishlist',
+      library: '/api/library'
     }
   });
 });

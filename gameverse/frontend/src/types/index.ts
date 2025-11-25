@@ -409,3 +409,89 @@ export interface NotificationStats {
     count: number;
   }>;
 }
+// Add these to your existing types
+
+export interface WishlistItem {
+  game: Game;
+  addedAt: string;
+  priority: 'low' | 'medium' | 'high';
+  notes: string;
+  priceAlert: {
+    isActive: boolean;
+    targetPrice: number;
+    currentPrice: number;
+  };
+}
+
+export interface Wishlist {
+  _id: string;
+  user: User;
+  games: WishlistItem[];
+  isPublic: boolean;
+  lastUpdated: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface GameTracking {
+  _id: string;
+  user: string;
+  game: Game;
+  status: 'playing' | 'completed' | 'paused' | 'dropped' | 'planning';
+  rating?: number;
+  hoursPlayed: number;
+  progress: number;
+  startDate?: string;
+  endDate?: string;
+  lastPlayed?: string;
+  achievements: Array<{
+    achievementId: string;
+    name: string;
+    description: string;
+    unlockedAt: string;
+    icon: string;
+  }>;
+  notes: string;
+  isFavorite: boolean;
+  platform?: string;
+  playSessions: Array<{
+    startTime: string;
+    endTime?: string;
+    duration?: number;
+    notes: string;
+  }>;
+  customFields: Map<string, any>;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface LibraryStats {
+  total: number;
+  playing: number;
+  completed: number;
+  planning: number;
+  totalHours: number;
+  favorites: number;
+}
+
+export interface GamingStats {
+  totalGames: number;
+  totalHours: number;
+  averageRating: number;
+  statusBreakdown: Record<string, number>;
+  genreBreakdown: Record<string, number>;
+  platformBreakdown: Record<string, number>;
+  recentActivity: Array<{
+    game: string;
+    gameId: string;
+    duration: number;
+    startTime: string;
+    notes: string;
+  }>;
+}
+
+export interface PlaySession {
+  startTime: string;
+  endTime?: string;
+  notes?: string;
+}

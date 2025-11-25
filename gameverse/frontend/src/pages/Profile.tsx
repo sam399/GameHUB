@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { Link } from 'react-router-dom';
 import { friendService } from '../services/friendService';
+import { wishlistService } from '../services/wishlistService';
+import WishlistPrivacyToggle from '../components/wishlist/WishlistPrivacyToggle';
 import { Friend, FriendRequest } from '../types';
 import { useSocket } from '../contexts/SocketContext';
 
@@ -13,13 +15,31 @@ const Profile: React.FC = () => {
     outgoing: []
   });
   const [loading, setLoading] = useState(false);
+  const [isWishlistPublic, setIsWishlistPublic] = useState<boolean | null>(null);
+  const [privacyLoading, setPrivacyLoading] = useState(false);
   const { refreshNotifications } = useSocket();
 
   useEffect(() => {
     if (user) {
       loadFriendData();
+      loadWishlistPrivacy();
     }
   }, [user]);
+
+  const loadWishlistPrivacy = async () => {
+    try {
+      setPrivacyLoading(true);
+      const res = await wishlistService.getWishlist();
+      // service returns an object where the API body is in `res.data`
+      const wishlist = res?.data?.wishlist;
+      setIsWishlistPublic(wishlist?.isPublic ?? true);
+    } catch (error) {
+      console.error('Error loading wishlist privacy:', error);
+      setIsWishlistPublic(null);
+    } finally {
+      setPrivacyLoading(false);
+    }
+  };
 
   const loadFriendData = async () => {
     try {
@@ -180,6 +200,13 @@ const Profile: React.FC = () => {
             <div>Xbox: {user.connectedAccounts?.xbox || 'Not connected'}</div>
             <div>PlayStation: {user.connectedAccounts?.playstation || 'Not connected'}</div>
           </div>
+        </div>
+
+        <div className="profile-section">
+          <h3>Wishlist</h3>
+          {/* Extracted wishlist privacy toggle into a small component */}
+          {/* @ts-ignore - dynamic import / no default export typing issues avoided by direct import */}
+          <WishlistPrivacyToggle userId={user._id} />
         </div>
 
         <div className="profile-section">

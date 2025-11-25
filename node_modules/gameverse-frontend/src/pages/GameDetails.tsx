@@ -8,7 +8,8 @@ import ReviewCard from '../components/reviews/ReviewCard';
 import ReviewForm from '../components/reviews/ReviewForm';
 import ReviewStats from '../components/reviews/ReviewStats';
 import { on as realtimeOn, off as realtimeOff } from '../services/realtime';
-
+import WishlistButton from '../components/games/WishlistButton';
+import TrackGameButton from '../components/games/TrackGameButton';
 const GameDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { user } = useAuth();
@@ -144,7 +145,10 @@ const GameDetails: React.FC = () => {
 
   return (
     <div className="game-details">
-      {/* Existing game hero and content sections */}
+      <div className="game-actions">
+        <WishlistButton game={game} size="large" showText />
+        <TrackGameButton game={game} />
+      </div>
       
       {/* Add reviews section */}
       <section className="game-reviews">
@@ -157,7 +161,7 @@ const GameDetails: React.FC = () => {
             />
           )}
         </div>
-
+         
         <div className="reviews-content">
           <div className="reviews-actions">
             {user && !userHasReviewed && !showReviewForm && (
