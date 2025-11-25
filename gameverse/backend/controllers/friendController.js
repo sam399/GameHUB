@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const realtime = require('../realtime');
 const Notification = require('../models/Notification');
 const { notificationFactory } = require('./notificationController');
+const AuditLog = require('../models/AuditLog');
 // @desc    Send friend request
 // @route   POST /api/friends/requests
 // @access  Private
@@ -107,6 +108,21 @@ exports.sendFriendRequest = async (req, res) => {
       console.error('Realtime notification error (sendFriendRequest):', err);
     }
 
+    // Audit log for friend request
+    try {
+      await AuditLog.logAction({
+        action: 'friend_request_sent',
+        performedBy: req.userId,
+        targetType: 'user',
+        targetId: toUserId,
+        description: `Sent friend request to user ${toUserId}`,
+        ipAddress: req.ip,
+        userAgent: req.headers['user-agent'] || ''
+      });
+    } catch (err) {
+      console.error('Audit log error (sendFriendRequest):', err);
+    }
+
     res.status(201).json({
       success: true,
       message: 'Friend request sent successfully'
@@ -198,6 +214,21 @@ exports.acceptFriendRequest = async (req, res) => {
       await notificationFactory.createFriendRequestAcceptedNotification(req.userId, fromUserId);
     } catch (err) {
       console.error('Realtime notification error (acceptFriendRequest):', err);
+    }
+
+    // Audit log for friend acceptance
+    try {
+      await AuditLog.logAction({
+        action: 'friend_request_accepted',
+        performedBy: req.userId,
+        targetType: 'user',
+        targetId: fromUserId,
+        description: `Accepted friend request from user ${fromUserId}`,
+        ipAddress: req.ip,
+        userAgent: req.headers['user-agent'] || ''
+      });
+    } catch (err) {
+      console.error('Audit log error (acceptFriendRequest):', err);
     }
 
     res.json({

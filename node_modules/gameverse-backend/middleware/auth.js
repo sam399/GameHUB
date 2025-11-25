@@ -67,3 +67,5 @@ exports.authorize = (...roles) => {
     }
   };
 };
+// Note: the proper async authorize implementation above is the exported function.
+// The duplicate simplified implementation was removed to ensure role checks run.

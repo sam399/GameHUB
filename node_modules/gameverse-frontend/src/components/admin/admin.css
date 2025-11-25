@@ -1,0 +1,59 @@
+.admin-container {
+  display: flex;
+  gap: 20px;
+}
+.admin-sidebar {
+  width: 220px;
+  padding: 16px;
+  border-right: 1px solid #e6e6e6;
+  background: #fafafa;
+}
+.admin-sidebar h3 {
+  margin-top: 0;
+}
+.admin-sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+.admin-sidebar li {
+  margin: 8px 0;
+}
+.admin-main {
+  flex: 1;
+  padding: 16px;
+}
+.admin-links {
+  margin-bottom: 12px;
+}
+.admin-links a {
+  margin-right: 12px;
+}
+.admin-reports ul {
+  list-style: none;
+  padding: 0;
+}
+.admin-reports li {
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.admin-report-meta {
+  flex: 1;
+}
+.admin-report-actions button {
+  margin-left: 8px;
+}
+.admin-users table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.admin-users th, .admin-users td {
+  text-align: left;
+  padding: 8px;
+  border-bottom: 1px solid #eee;
+}
+.admin-dashboard .stats p {
+  margin: 6px 0;
+}

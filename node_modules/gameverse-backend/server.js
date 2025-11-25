@@ -19,6 +19,7 @@ const io = socketio(server, {
 // Initialize realtime helper with io instance
 const realtime = require('./realtime');
 realtime.setIo(io);
+const User = require('./models/User');
 
 // Middleware
 app.use(cors());
@@ -34,6 +35,9 @@ app.use('/api/notifications', require('./routes/notifications'));
 app.use('/api/friends', require('./routes/friends'));
 app.use('/api/wishlist', require('./routes/wishlist'));
 app.use('/api/library', require('./routes/library'));
+app.use('/api/admin', require('./routes/admin'));
+app.use('/api/reports', require('./routes/reports'));
+
 // Basic route
 app.get('/api', (req, res) => {
   res.json({ 
@@ -48,7 +52,9 @@ app.get('/api', (req, res) => {
       friends: '/api/friends',
       notifications: '/api/notifications',
       wishlist: '/api/wishlist',
-      library: '/api/library'
+      library: '/api/library',
+      admin: '/api/admin',
+      reports: '/api/reports'
     }
   });
 });
@@ -60,12 +66,27 @@ io.on('connection', (socket) => {
   console.log('New client connected:', socket.id);
 
   // User joins with their user ID
-  socket.on('user_connected', (userId) => {
-    connectedUsers.set(userId, socket.id);
-    console.log(`User ${userId} connected with socket ${socket.id}`);
-    
-    // Join user to their personal room for private messages
-    socket.join(`user_${userId}`);
+  socket.on('user_connected', async (userId) => {
+    try {
+      connectedUsers.set(userId, socket.id);
+      console.log(`User ${userId} connected with socket ${socket.id}`);
+
+      // Join user to their personal room for private messages
+      socket.join(`user_${userId}`);
+
+      // If user is admin/moderator, also join them to admin room for admin realtime events
+      try {
+        const user = await User.findById(userId).select('role');
+        if (user && ['admin', 'moderator'].includes(user.role)) {
+          socket.join('admin_room');
+          console.log(`Admin user ${userId} joined admin_room`);
+        }
+      } catch (err) {
+        console.error('Error checking user role for admin room join:', err);
+      }
+    } catch (err) {
+      console.error('user_connected handler error:', err);
+    }
   });
 
   // Join chat room

@@ -1,6 +1,7 @@
 const Wishlist = require('../models/Wishlist');
 const Game = require('../models/Game');
 const { notificationFactory } = require('./notificationController');
+const AuditLog = require('../models/AuditLog');
 
 // @desc    Get user's wishlist
 // @route   GET /api/wishlist
@@ -180,6 +181,21 @@ exports.togglePrivacy = async (req, res) => {
 
     wishlist.isPublic = isPublic;
     await wishlist.save();
+
+    // Audit log for privacy toggle
+    try {
+      await AuditLog.logAction({
+        action: 'wishlist_privacy_changed',
+        performedBy: req.userId,
+        targetType: 'user',
+        targetId: req.userId,
+        description: `Toggled wishlist privacy to ${wishlist.isPublic ? 'public' : 'private'}`,
+        ipAddress: req.ip,
+        userAgent: req.headers['user-agent'] || ''
+      });
+    } catch (err) {
+      console.error('Audit log error (togglePrivacy):', err);
+    }
 
     res.json({
       success: true,

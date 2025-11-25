@@ -495,3 +495,95 @@ export interface PlaySession {
   endTime?: string;
   notes?: string;
 }
+// Add these to your existing types
+
+export interface Report {
+  _id: string;
+  reporter: User;
+  reportedItemType: 'user' | 'game' | 'review' | 'forum_thread' | 'forum_post' | 'message';
+  reportedItem: any;
+  reason: 'spam' | 'harassment' | 'inappropriate_content' | 'false_information' | 'hate_speech' | 'other';
+  description: string;
+  status: 'pending' | 'under_review' | 'resolved' | 'dismissed';
+  severity: 'low' | 'medium' | 'high' | 'critical';
+  assignedTo?: User;
+  resolution?: {
+    action: 'content_removed' | 'user_warned' | 'user_suspended' | 'user_banned' | 'no_action' | 'other';
+    notes: string;
+    resolvedBy: User;
+    resolvedAt: string;
+  };
+  evidence: Array<{
+    type: 'screenshot' | 'text' | 'link';
+    content: string;
+    description: string;
+  }>;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface AuditLog {
+  _id: string;
+  action: string;
+  performedBy: User;
+  targetType?: 'user' | 'game' | 'review' | 'forum_thread' | 'forum_post' | 'system';
+  targetId?: string;
+  description: string;
+  changes?: Map<string, any>;
+  ipAddress?: string;
+  userAgent?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface DashboardStats {
+  overview: {
+    totalUsers: number;
+    newUsersToday: number;
+    newUsersThisWeek: number;
+    totalGames: number;
+    totalReviews: number;
+    totalThreads: number;
+    totalPosts: number;
+    pendingReports: number;
+    activeModerators: number;
+  };
+  userGrowth: Array<{
+    _id: { year: number; month: number; day: number };
+    count: number;
+  }>;
+  contentStats: {
+    averageRating: number;
+    totalRatings: number;
+    averagePostsPerThread: number;
+    totalForumViews: number;
+  };
+  recentActivities: AuditLog[];
+}
+
+export interface AnalyticsData {
+  userAnalytics: Array<{
+    _id: { date: string };
+    newUsers: number;
+  }>;
+  reviewStats: Array<{
+    _id: { date: string };
+    newReviews: number;
+    avgRating: number;
+  }>;
+  threadStats: Array<{
+    _id: { date: string };
+    newThreads: number;
+  }>;
+  gameStats: Array<{
+    _id: { date: string };
+    newGames: number;
+  }>;
+  reportAnalytics: Array<{
+    _id: { date: string };
+    newReports: number;
+    resolvedReports: number;
+  }>;
+  period: string;
+}

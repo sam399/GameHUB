@@ -115,6 +115,9 @@ const Navbar: React.FC = () => {
                   <span className="badge">{myReviewsCount}</span>
                 )}
               </Link>
+              {user && ['admin', 'moderator'].includes(user.role) && (
+                <Link to="/admin/dashboard" className="nav-link" onClick={close}>Admin</Link>
+              )}
               <div style={{ display: 'inline-flex', alignItems: 'center', marginLeft: 10 }}>
                 <Notifications />
               </div>

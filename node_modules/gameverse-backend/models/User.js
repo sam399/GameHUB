@@ -10,6 +10,13 @@ const userSchema = new mongoose.Schema({
     minlength: [3, 'Username must be at least 3 characters'],
     maxlength: [30, 'Username cannot exceed 30 characters']
   },
+
+  role: {
+    type: String,
+    enum: ['user', 'moderator', 'admin'],
+    default: 'user'
+  },
+
   email: {
     type: String,
     required: [true, 'Email is required'],
@@ -18,69 +25,52 @@ const userSchema = new mongoose.Schema({
     lowercase: true,
     match: [/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/, 'Please enter a valid email']
   },
+
   password: {
     type: String,
     required: [true, 'Password is required'],
     minlength: [6, 'Password must be at least 6 characters']
   },
+
   profile: {
-    avatar: {
-      type: String,
-      default: ''
-    },
-    bio: {
-      type: String,
-      maxlength: [500, 'Bio cannot exceed 500 characters'],
-      default: ''
-    },
-    gamingPreferences: [{
-      genre: String,
-      platform: String
-    }]
+    avatar: { type: String, default: '' },
+    bio: { type: String, maxlength: [500, 'Bio cannot exceed 500 characters'], default: '' },
+    gamingPreferences: [{ genre: String, platform: String }]
   },
+
   friends: [{
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
-  },
-  since: {
-    type: Date,
-    default: Date.now
-  }
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    since: { type: Date, default: Date.now }
   }],
+
   friendRequests: [{
-  from: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
-  },
-  to: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
-  },
-  status: {
-    type: String,
-    enum: ['pending', 'accepted', 'rejected'],
-    default: 'pending'
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now
-  }
+    from: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    to: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    status: { type: String, enum: ['pending', 'accepted', 'rejected'], default: 'pending' },
+    createdAt: { type: Date, default: Date.now }
   }],
+
   connectedAccounts: {
     steam: { type: String, default: '' },
     epic: { type: String, default: '' },
     xbox: { type: String, default: '' },
     playstation: { type: String, default: '' }
   },
-  role: {
-    type: String,
-    enum: ['user', 'admin', 'moderator'],
-    default: 'user'
-  },
-  isActive: {
-    type: Boolean,
-    default: true
+
+  isActive: { type: Boolean, default: true },
+
+  adminSettings: {
+    permissions: [{
+      type: String,
+      enum: [
+        'manage_users',
+        'manage_games',
+        'manage_content',
+        'view_analytics',
+        'system_settings'
+      ]
+    }],
+    lastActive: { type: Date, default: Date.now }
   }
 }, {
   timestamps: true
@@ -88,10 +78,8 @@ const userSchema = new mongoose.Schema({
 
 // Hash password before saving
 userSchema.pre('save', async function(next) {
-  if (!this.isModified('password')) {
-    return next();
-  }
-  
+  if (!this.isModified('password')) return next();
+
   try {
     const salt = await bcrypt.genSalt(12);
     this.password = await bcrypt.hash(this.password, salt);
