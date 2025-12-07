@@ -1,9 +1,20 @@
 {
+  "name": "gameverse",
+  "version": "1.0.0",
+  "description": "AI-Powered Gaming Community Platform",
   "private": true,
   "workspaces": [
     "gameverse/backend",
     "gameverse/frontend"
   ],
+  "scripts": {
+    "dev": "cd gameverse/backend && npm run dev & cd gameverse/frontend && npm run dev",
+    "build": "npm run build:backend && npm run build:frontend",
+    "build:backend": "cd gameverse/backend && npm install",
+    "build:frontend": "cd gameverse/frontend && npm install && npm run build",
+    "start": "cd gameverse/backend && npm start",
+    "start:frontend": "cd gameverse/frontend && npm run preview"
+  },
   "dependencies": {
     "bcryptjs": "^3.0.3",
     "cors": "^2.8.5",

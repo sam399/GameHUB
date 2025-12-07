@@ -167,4 +167,30 @@ Want to run both servers together?
 
 - Use a process manager (tmux, Windows Terminal panes) or add an orchestration script (e.g., `concurrently` or `npm-run-all`) to the workspace `package.json`.
 
+## Deployment on Vercel
+
+Ready to deploy? We've prepared everything for you!
+
+### Quick Deployment (20-30 minutes)
+
+1. **Start with:** [QUICK_START_DEPLOYMENT.md](./QUICK_START_DEPLOYMENT.md) (5-minute guide)
+2. **Detailed steps:** [DEPLOYMENT_COMMANDS.md](./DEPLOYMENT_COMMANDS.md) (copy-paste ready)
+3. **Complete guide:** [VERCEL_DEPLOYMENT.md](./VERCEL_DEPLOYMENT.md) (comprehensive)
+4. **Checklist:** [DEPLOYMENT_CHECKLIST.md](./DEPLOYMENT_CHECKLIST.md) (verification)
+
+**What's included:**
+- ✅ Pre-configured `vercel.json`
+- ✅ Backend serverless setup
+- ✅ Frontend build optimization
+- ✅ Environment variable templates
+- ✅ Troubleshooting guides
+- ✅ Post-deployment checklists
+
+**You'll need:**
+- GitHub account (code pushed)
+- MongoDB Atlas account (free cloud database)
+- Vercel account (free hosting)
+
+**Result:** Your app lives at `https://gameverse-xxxxx.vercel.app` 🚀
+
 Enjoy building!

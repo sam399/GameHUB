@@ -187,6 +187,13 @@ mongoose.connect(MONGODB_URI, {
 .catch(err => console.log('❌ MongoDB connection error:', err));
 
 const PORT = process.env.PORT || 5000;
-server.listen(PORT, () => {
-  console.log(`🚀 Server is running on http://localhost:${PORT}`);
-});
+
+// Only listen if not in serverless environment (Vercel)
+if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+  server.listen(PORT, () => {
+    console.log(`🚀 Server is running on http://localhost:${PORT}`);
+  });
+}
+
+// Export for Vercel serverless functions
+module.exports = app;
