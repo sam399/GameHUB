@@ -23,6 +23,8 @@ import AdminUsers from './pages/AdminUsers';
 import AdminReports from './pages/AdminReports';
 import AdminAuditLogs from './pages/AdminAuditLogs';
 import AdminModeration from './pages/AdminModeration';
+import NewsFeed from './pages/Home/NewsFeed';
+
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user, loading } = useAuth();
   
@@ -69,6 +71,11 @@ function AppContent() {
       <main>
         <Routes>
           <Route path="/" element={<GameLibrary />} />
+          <Route path="/feed" element={
+            <ProtectedRoute>
+              <NewsFeed />
+            </ProtectedRoute>
+          } />
           <Route path="/games/:id" element={<GameDetails />} />
           <Route path="/profile" element={
             <ProtectedRoute>

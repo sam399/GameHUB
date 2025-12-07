@@ -106,6 +106,7 @@ const Navbar: React.FC = () => {
 
         <nav ref={navRef} className={`nav-links ${open ? 'open' : ''}`} role="navigation">
           <Link to="/" className="nav-link" onClick={close}>Library</Link>
+          <Link to="/feed" className="nav-link" onClick={close}>Feed</Link>
           <Link to="/featured" className="nav-link" onClick={close}>Featured</Link>
           {user ? (
             <>
