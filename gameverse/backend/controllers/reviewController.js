@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Review = require('../models/Review');
 const Game = require('../models/Game');
+const Activity = require('../models/Activity');
 const realtime = require('../realtime');
 
 // @desc    Get reviews for a game
@@ -111,8 +112,34 @@ exports.createReview = async (req, res) => {
       const updatedGame = await Game.findById(gameId).select('rating');
       realtime.emit('review:created', { gameId, review });
       realtime.emit('game:ratingUpdated', { gameId, rating: updatedGame ? updatedGame.rating : null });
+
+      // Create activity for the feed
+      await Activity.create({
+        user: req.userId,
+        type: 'GAME_REVIEWED',
+        data: {
+          gameId: game._id,
+          gameName: game.title,
+          reviewRating: req.body.rating
+        },
+        visibility: 'PUBLIC'
+      });
+      
+      // Emit activity_created event to all connected users
+      realtime.io.emit('activity_created', {
+        _id: null, // Will be populated by client if needed
+        user: { _id: req.userId, username: req.user.username, profile: req.user.profile },
+        type: 'GAME_REVIEWED',
+        data: {
+          gameId: game._id,
+          gameName: game.title,
+          reviewRating: req.body.rating
+        },
+        visibility: 'PUBLIC',
+        createdAt: new Date()
+      });
     } catch (err) {
-      console.warn('Realtime emit after create failed:', err && err.message ? err.message : err);
+      console.warn('Realtime/activity emit after create failed:', err && err.message ? err.message : err);
     }
 
     res.status(201).json({
@@ -356,3 +383,6 @@ exports.getReviewStats = async (req, res) => {
     });
   }
 };
+
+// Legacy/deprecated code below - addReview was replaced with createReview
+// Keeping for reference but not exported

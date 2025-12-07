@@ -11,8 +11,8 @@ const server = http.createServer(app);
 // Socket.io setup with CORS
 const io = socketio(server, {
   cors: {
-    origin: process.env.FRONTEND_URL || "http://localhost:3000",
-    methods: ["GET", "POST"]
+    origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+    methods: ['GET', 'POST']
   }
 });
 
@@ -20,6 +20,7 @@ const io = socketio(server, {
 const realtime = require('./realtime');
 realtime.setIo(io);
 const User = require('./models/User');
+const feedRoutes = require('./routes/feedRoutes');
 
 // Middleware
 app.use(cors());
@@ -32,15 +33,18 @@ app.use('/api/reviews', require('./routes/reviews'));
 app.use('/api/forum', require('./routes/forum'));
 app.use('/api/chats', require('./routes/chats'));
 app.use('/api/notifications', require('./routes/notifications'));
+app.use('/api/notification-preferences', require('./routes/notificationPreferences'));
 app.use('/api/friends', require('./routes/friends'));
 app.use('/api/wishlist', require('./routes/wishlist'));
 app.use('/api/library', require('./routes/library'));
 app.use('/api/admin', require('./routes/admin'));
 app.use('/api/reports', require('./routes/reports'));
-
+app.use('/api/leaderboards', require('./routes/leaderboards'));
+app.use('/api/achievements', require('./routes/achievements'));
+app.use('/api/feed', feedRoutes);
 // Basic route
 app.get('/api', (req, res) => {
-  res.json({ 
+  res.json({
     message: 'GameVerse API is running!',
     version: '1.0.0',
     endpoints: {
@@ -54,7 +58,10 @@ app.get('/api', (req, res) => {
       wishlist: '/api/wishlist',
       library: '/api/library',
       admin: '/api/admin',
-      reports: '/api/reports'
+      reports: '/api/reports',
+      leaderboards: '/api/leaderboards',
+      achievements: '/api/achievements',
+      feed: '/api/feed'
     }
   });
 });
@@ -182,23 +189,4 @@ mongoose.connect(MONGODB_URI, {
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
   console.log(`🚀 Server is running on http://localhost:${PORT}`);
-});
-// Add this after other route imports
-app.use('/api/notifications', require('./routes/notifications'));
-
-// Update the basic route to show new endpoints
-app.get('/api', (req, res) => {
-  res.json({ 
-    message: 'GameVerse API is running!',
-    version: '1.0.0',
-    endpoints: {
-      auth: '/api/auth',
-      games: '/api/games',
-      reviews: '/api/reviews',
-      forum: '/api/forum',
-      chats: '/api/chats',
-      friends: '/api/friends',
-      notifications: '/api/notifications'
-    }
-  });
 });

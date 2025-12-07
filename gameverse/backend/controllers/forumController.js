@@ -1,6 +1,9 @@
 const ForumCategory = require('../models/ForumCategory');
 const ForumThread = require('../models/ForumThread');
 const ForumPost = require('../models/ForumPost');
+const Activity = require('../models/Activity');
+const User = require('../models/User');
+const realtime = require('../realtime');
 
 // @desc    Get all forum categories
 // @route   GET /api/forum/categories
@@ -202,6 +205,37 @@ exports.createPost = async (req, res) => {
     });
 
     await post.populate('author', 'username profile.avatar');
+
+    // Create activity for the feed
+    try {
+      await Activity.create({
+        user: req.userId,
+        type: 'GAME_ADDED',
+        data: {
+          gameId: null,
+          gameName: thread.title,
+          reviewRating: null
+        },
+        visibility: 'PUBLIC'
+      });
+
+      // Emit activity_created event
+      const user = await User.findById(req.userId).select('username profile.avatar');
+      realtime.io.emit('activity_created', {
+        _id: null,
+        user: { _id: req.userId, username: user?.username, profile: user?.profile },
+        type: 'GAME_ADDED',
+        data: {
+          gameId: null,
+          gameName: `Forum post in: ${thread.title}`,
+          reviewRating: null
+        },
+        visibility: 'PUBLIC',
+        createdAt: new Date()
+      });
+    } catch (activityErr) {
+      console.warn('Forum post activity creation failed:', activityErr.message);
+    }
 
     res.status(201).json({
       success: true,

@@ -3,6 +3,7 @@ import { io, Socket } from 'socket.io-client';
 import { useAuth } from './AuthContext';
 import { Message, TypingUser } from '../types';
 import { notificationService } from '../services/notificationService';
+import { toast } from 'react-toastify';
 
 interface SocketContextType {
   socket: Socket | null;
@@ -48,6 +49,15 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
       console.warn('Failed to refresh notifications:', err);
     }
   };
+
+  // Auto-refresh persisted notifications when a user session is present
+  useEffect(() => {
+    if (user) {
+      refreshNotifications();
+    } else {
+      setNotifications([]);
+    }
+  }, [user]);
 
   useEffect(() => {
     if (user) {
@@ -129,10 +139,28 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
       console.log('Friend removed via socket', data);
     };
 
+    const handleAchievementUnlocked = (data: any) => {
+      refreshNotifications();
+      const name = data?.name || 'Achievement unlocked';
+      toast.success(`🏅 ${name}${data?.points ? ` (+${data.points} pts)` : ''}`);
+    };
+
+    const handleLeaderboardUpdated = (data: any) => {
+      console.log('Leaderboard updated', data);
+      // Dispatch a browser event so leaderboard views can listen and refetch
+      try {
+        window.dispatchEvent(new CustomEvent('leaderboard.updated', { detail: data }));
+      } catch (e) {
+        /* no-op */
+      }
+    };
+
     socket.on('friend_request:received', handleFriendRequest);
     socket.on('friend_request:accepted', handleFriendAccepted);
     socket.on('friend_request:cancelled', handleFriendCancelled);
     socket.on('friend:removed', handleFriendRemoved);
+    socket.on('achievement_unlocked', handleAchievementUnlocked);
+    socket.on('leaderboard.updated', handleLeaderboardUpdated);
 
     return () => {
       socket.off('user_typing', handleUserTyping);
@@ -140,6 +168,8 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
       socket.off('friend_request:accepted', handleFriendAccepted);
       socket.off('friend_request:cancelled', handleFriendCancelled);
       socket.off('friend:removed', handleFriendRemoved);
+      socket.off('achievement_unlocked', handleAchievementUnlocked);
+      socket.off('leaderboard.updated', handleLeaderboardUpdated);
     };
   }, [socket]);
 

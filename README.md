@@ -17,6 +17,23 @@ Additional features added recently:
 - Playwright smoke tests for quick end-to-end checks (frontend/tests).
 - Small admin UI: side-menu layout, assign/resolve controls for reports, and simple admin pages scaffolded.
 
+**Latest enhancements (Q4 2025):**
+
+- **Activity Hooks & Real-time Feed** — Automatic activity creation with Socket.IO broadcasts across all controllers (achievements, forum posts, leaderboard scores, reviews). Activities include rich metadata (user, type, game info, timestamps) and are broadcast to all connected clients via `activity_created` events for real-time feed updates.
+  
+- **Redis Caching with Fallback** — Integrated Redis-backed caching for RAWG API gaming news with 1-hour TTL and automatic fallback to in-process cache if Redis is unavailable. Reduces API latency and external dependencies while maintaining data freshness.
+
+- **Activity Filtering & Search** — Frontend feed now supports filtering by activity type (e.g., `ACHIEVEMENT_UNLOCKED`, `GAME_REVIEWED`, `NEW_HIGHSCORE`), full-text search across activity data, and sort options (newest/oldest). Includes "Reset Filters" button for quick view reset.
+
+- **Notification Preferences System** — New `NotificationPreference` model and controller (`/api/notification-preferences`) allowing users to customize:
+  - Which activity types trigger notifications (activities: achievements, reviews, forum posts, etc.)
+  - System notifications (friend requests, messages, etc.)
+  - Delivery method preferences (in-app, email, push)
+  - Email digest frequency (daily, weekly, never)
+  - Quiet hours (configurable time window to suppress notifications)
+
+- **Activity Search & Sorting** — Backend feed endpoint now supports pagination, filtering by activity type, and sorting. Frontend includes interactive controls for searching user activities and sorting by recency or popularity.
+
 ## Quick Start
 
 Prerequisites
@@ -82,6 +99,14 @@ Key API endpoints
 - `GET /api/friends` — get friends list (protected)
 - `GET /api/friends/requests` — get incoming/outgoing friend requests (protected)
 - Friend request actions: `POST /api/friends/requests`, `PUT /api/friends/requests/:id/accept`, `PUT /api/friends/requests/:id/reject`, `DELETE /api/friends/requests/:id`
+
+Activity & Feed endpoints
+- `GET /api/feed` — fetch activity feed with pagination, filtering by type, and search (protected)
+- `GET /api/notification-preferences` — get user's notification preferences (protected)
+- `PUT /api/notification-preferences` — update all notification preference settings (protected)
+- `PATCH /api/notification-preferences/activities` — update which activities trigger notifications (protected)
+- `PATCH /api/notification-preferences/delivery` — update delivery method preferences (protected)
+- `PATCH /api/notification-preferences/email-digest` — update email digest settings (protected)
 
 Admin & moderation endpoints (examples)
 - `GET /api/admin/dashboard` — admin dashboard statistics (admin only)
