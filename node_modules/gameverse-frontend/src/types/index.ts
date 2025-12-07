@@ -363,7 +363,7 @@ export interface UsersSearchResponse {
 export interface FriendSuggestionsResponse {
   success: boolean;
   data: {
-    suggestions: User[];
+    suggestions: UserWithFriendship[];
   };
 }
 // Add these to your existing types

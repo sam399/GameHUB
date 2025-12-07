@@ -10,7 +10,7 @@ interface FindFriendsProps {
 const FindFriends: React.FC<FindFriendsProps> = ({ onFriendAdded }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [users, setUsers] = useState<UserWithFriendship[]>([]);
-  const [suggestions, setSuggestions] = useState<any[]>([]);
+  const [suggestions, setSuggestions] = useState<UserWithFriendship[]>([]);
   const [loading, setLoading] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(true);
 
@@ -30,7 +30,7 @@ const FindFriends: React.FC<FindFriendsProps> = ({ onFriendAdded }) => {
   const loadSuggestions = async () => {
     try {
       const response = await friendService.getFriendSuggestions();
-      setSuggestions(response.data.suggestions as any[]);
+      setSuggestions(response.data.suggestions);
     } catch (error) {
       console.error('Error loading suggestions:', error);
     }

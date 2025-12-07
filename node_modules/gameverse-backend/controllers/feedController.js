@@ -6,13 +6,52 @@ const redisCache = require('../utils/redisCache');
 const NEWS_CACHE_KEY = 'feed:rawg_news';
 const NEWS_CACHE_TTL = 60 * 60; // 1 hour in seconds
 
+// Fallback mock news data
+const getMockNews = () => [
+  {
+    type: 'EXTERNAL_NEWS',
+    title: 'Trending: Elden Ring - Shadow of the Erdtree',
+    image: 'https://images.igdb.com/igdb/image/upload/t_screenshot_big/sc8xk1.jpg',
+    link: 'https://rawg.io',
+    createdAt: new Date().toISOString()
+  },
+  {
+    type: 'EXTERNAL_NEWS',
+    title: 'Trending: Baldur\'s Gate 3',
+    image: 'https://images.igdb.com/igdb/image/upload/t_screenshot_big/sckbxh.jpg',
+    link: 'https://rawg.io',
+    createdAt: new Date().toISOString()
+  },
+  {
+    type: 'EXTERNAL_NEWS',
+    title: 'Trending: Cyberpunk 2077: Phantom Liberty',
+    image: 'https://images.igdb.com/igdb/image/upload/t_screenshot_big/scmhfj.jpg',
+    link: 'https://rawg.io',
+    createdAt: new Date().toISOString()
+  },
+  {
+    type: 'EXTERNAL_NEWS',
+    title: 'Trending: The Legend of Zelda: Tears of the Kingdom',
+    image: 'https://images.igdb.com/igdb/image/upload/t_screenshot_big/sc3zg1.jpg',
+    link: 'https://rawg.io',
+    createdAt: new Date().toISOString()
+  },
+  {
+    type: 'EXTERNAL_NEWS',
+    title: 'Trending: Starfield',
+    image: 'https://images.igdb.com/igdb/image/upload/t_screenshot_big/scs2wc.jpg',
+    link: 'https://rawg.io',
+    createdAt: new Date().toISOString()
+  }
+];
+
 const getExternalNews = async () => {
   return redisCache.getOrCompute(NEWS_CACHE_KEY, NEWS_CACHE_TTL, async () => {
     try {
       const apiKey = process.env.RAWG_API_KEY;
-      if (!apiKey) {
-        console.warn('RAWG_API_KEY not set; skipping external news');
-        return [];
+      if (!apiKey || apiKey === 'your_rawg_api_key_here') {
+        console.warn('RAWG_API_KEY not set; using mock news data');
+        return getMockNews();
       }
 
       const response = await axios.get('https://api.rawg.io/api/games', {
@@ -34,7 +73,7 @@ const getExternalNews = async () => {
       }));
     } catch (err) {
       console.error('External news API error:', err.message);
-      return [];
+      return getMockNews();
     }
   });
 };

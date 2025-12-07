@@ -628,9 +628,23 @@ exports.getFriendSuggestions = async (req, res) => {
     const currentUser = await User.findById(req.userId);
     const friendIds = currentUser.friends.map(friend => friend.user.toString());
     
+    // Get pending friend requests
+    const pendingRequests = await FriendRequest.find({
+      $or: [
+        { from: req.userId },
+        { to: req.userId }
+      ],
+      status: 'pending'
+    });
+
+    const requestUserIds = new Set();
+    pendingRequests.forEach(request => {
+      requestUserIds.add(request.from.toString());
+      requestUserIds.add(request.to.toString());
+    });
+    
     // Get users who are not friends and not the current user
-    // This is a simple suggestion algorithm - in production you might want more sophisticated logic
-    const suggestions = await User.find({
+    const suggestedUsers = await User.find({
       _id: { 
         $ne: req.userId,
         $nin: friendIds
@@ -640,6 +654,29 @@ exports.getFriendSuggestions = async (req, res) => {
       .select('username profile.avatar profile.bio')
       .limit(10)
       .sort({ createdAt: -1 });
+
+    // Add friendship status to each suggestion
+    const suggestions = suggestedUsers.map(user => {
+      const userId = user._id.toString();
+      const outgoingRequest = pendingRequests.find(
+        req => req.from.toString() === req.userId.toString() && req.to.toString() === userId
+      );
+      const incomingRequest = pendingRequests.find(
+        req => req.from.toString() === userId && req.to.toString() === req.userId.toString()
+      );
+
+      return {
+        _id: user._id,
+        username: user.username,
+        profile: user.profile,
+        friendshipStatus: {
+          isFriend: false,
+          hasPendingRequest: !!outgoingRequest || !!incomingRequest,
+          outgoingRequest: outgoingRequest?._id,
+          incomingRequest: incomingRequest?._id
+        }
+      };
+    });
 
     res.json({
       success: true,

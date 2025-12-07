@@ -49,6 +49,7 @@ Important environment variables (backend)
 
 Optional / useful env vars
 - `FRONTEND_URL` or `VITE_API_URL` — base url used by the frontend (Socket.IO client) when not running on localhost:5000.
+- `RAWG_API_KEY` — API key for RAWG Video Games Database (https://rawg.io/apidocs). Get a free key at https://rawg.io/login?forward=developer. If not set, the app will use mock news data.
 
 Create a `.env` file in `gameverse/backend` with the values above. Example:
 
