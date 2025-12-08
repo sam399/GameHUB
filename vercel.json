@@ -2,7 +2,7 @@
   "version": 2,
   "builds": [
     {
-      "src": "gameverse/backend/server.js",
+      "src": "gameverse/backend/serverless.js",
       "use": "@vercel/node",
       "config": {
         "maxLambdaSize": "50mb",
