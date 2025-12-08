@@ -7,7 +7,7 @@
     "start": "vite",
     "test:e2e": "playwright test",
     "test:e2e:headed": "playwright test --headed",
-    "build": "vite build",
+    "build": "node ./node_modules/vite/bin/vite.js build",
     "preview": "vite preview"
   },
   "dependencies": {
