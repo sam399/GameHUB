@@ -186,11 +186,6 @@ Ready to deploy? We've prepared everything for you!
 - ✅ Troubleshooting guides
 - ✅ Post-deployment checklists
 
-**You'll need:**
-- GitHub account (code pushed)
-- MongoDB Atlas account (free cloud database)
-- Vercel account (free hosting)
 
-**Result:** Your app lives at `https://gameverse-xxxxx.vercel.app` 🚀
 
 Enjoy building!
