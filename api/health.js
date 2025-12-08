@@ -1,0 +1,10 @@
+// Simple health check for Vercel deployments
+module.exports = (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  res.statusCode = 200;
+  res.end(JSON.stringify({
+    status: 'ok',
+    service: 'GameVerse (health check)',
+    time: new Date().toISOString()
+  }));
+};
