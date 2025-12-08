@@ -20,7 +20,7 @@
   "routes": [
     {
       "src": "^/api/(.*)$",
-      "dest": "/gameverse/backend/server.js"
+      "dest": "/gameverse/backend/serverless.js"
     },
     {
       "handle": "filesystem"
