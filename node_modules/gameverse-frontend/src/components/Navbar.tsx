@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { reviewService } from '../services/reviewService';
 import Notifications from './notifications/Notifications';
+import ThemeToggle from './common/ThemeToggle';
 
 const Navbar: React.FC = () => {
   const [open, setOpen] = useState(false);
@@ -122,9 +123,13 @@ const Navbar: React.FC = () => {
               <div style={{ display: 'inline-flex', alignItems: 'center', marginLeft: 10 }}>
                 <Notifications />
               </div>
+              <ThemeToggle />
             </>
           ) : (
-            <Link to="/login" className="nav-link small-muted" onClick={close}>Login</Link>
+            <>
+              <Link to="/login" className="nav-link small-muted" onClick={close}>Login</Link>
+              <ThemeToggle />
+            </>
           )}
 
           {/* Desktop user menu (avatar + dropdown) */}

@@ -43,6 +43,8 @@ app.use('/api/moderation', require('./routes/moderationRoutes'));
 app.use('/api/leaderboards', require('./routes/leaderboards'));
 app.use('/api/achievements', require('./routes/achievements'));
 app.use('/api/feed', feedRoutes);
+const eventRoutes = require('./routes/eventRoutes');
+app.use('/api/events', eventRoutes);
 // Basic route
 app.get('/api', (req, res) => {
   res.json({

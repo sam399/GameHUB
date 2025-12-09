@@ -203,3 +203,53 @@ body {
     .nav-links.open .nav-link:nth-child(6) { transition-delay: 0.23s; }
 }
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* --- LIGHT MODE PALETTE (Default) --- */
+    /* Backgrounds */
+    --color-bg-primary: #ffffff;      /* Main page background */
+    --color-bg-secondary: #f3f4f6;    /* Cards, sidebars (gray-100) */
+    --color-bg-tertiary: #e5e7eb;     /* Inputs, hovers (gray-200) */
+
+    /* Text */
+    --color-text-primary: #111827;    /* Headings (gray-900) */
+    --color-text-secondary: #4b5563;  /* Paragraphs (gray-600) */
+    --color-text-muted: #9ca3af;      /* Placeholders (gray-400) */
+
+    /* Accents (Brand Colors) */
+    --color-accent-primary: #7c3aed;  /* Purple-600 */
+    --color-accent-hover: #6d28d9;    /* Purple-700 */
+    
+    /* Borders */
+    --color-border: #e5e7eb;          /* gray-200 */
+  }
+
+  .dark {
+    /* --- DARK MODE PALETTE (Overrides) --- */
+    /* Backgrounds */
+    --color-bg-primary: #111827;      /* gray-900 */
+    --color-bg-secondary: #1f2937;    /* gray-800 */
+    --color-bg-tertiary: #374151;     /* gray-700 */
+
+    /* Text */
+    --color-text-primary: #f9fafb;    /* gray-50 */
+    --color-text-secondary: #d1d5db;  /* gray-300 */
+    --color-text-muted: #6b7280;      /* gray-500 */
+
+    /* Accents (Often lighter in dark mode for contrast) */
+    --color-accent-primary: #8b5cf6;  /* Purple-500 */
+    --color-accent-hover: #7c3aed;    /* Purple-600 */
+
+    /* Borders */
+    --color-border: #374151;          /* gray-700 */
+  }
+}
+
+/* Optional: Smooth transition for all color changes */
+body {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}

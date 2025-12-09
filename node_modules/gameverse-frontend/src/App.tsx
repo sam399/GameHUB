@@ -24,6 +24,7 @@ import AdminReports from './pages/AdminReports';
 import AdminAuditLogs from './pages/AdminAuditLogs';
 import AdminModeration from './pages/AdminModeration';
 import NewsFeed from './pages/Home/NewsFeed';
+import { ThemeProvider } from './contexts/ThemeContext';
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user, loading } = useAuth();
@@ -155,16 +156,18 @@ function AppContent() {
 
 function App() {
   return (
-    <Router>
-      <AuthProvider>
-        <SocketProvider>
-          <NotificationProvider>
-            <AppContent />
-          </NotificationProvider>
-        </SocketProvider>
-      </AuthProvider>
-    </Router>
+    <ThemeProvider>
+      <Router>
+        <AuthProvider>
+          <SocketProvider>
+            <NotificationProvider>
+              <AppContent />
+            </NotificationProvider>
+          </SocketProvider>
+        </AuthProvider>
+      </Router>
+    </ThemeProvider>
   );
 }
-export default App;
 
+export default App;

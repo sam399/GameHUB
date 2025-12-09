@@ -43,6 +43,21 @@ Additional features added recently:
   - **Real-time Updates** — Socket.IO events notify admins instantly when new reports are created
   - **Multiple Actions** — Delete content, ban users, or dismiss false reports with resolution notes
 
+- **Events & Tournament System** — Gaming events and community gatherings:
+  - **Event Types** — Support for tournaments, LAN parties, and casual meetups
+  - **Event Management** — Create events with game selection, start time, location (online/offline), and participant limits
+  - **Event Registration** — Users can join/register for events with status tracking (REGISTERED, CHECKED_IN, ELIMINATED, WINNER)
+  - **Real-time Participant Updates** — Live participant count and status updates
+  - **Event Card Component** — Beautiful event display with game info, date/time, and participant count
+
+- **Dark Mode & Theme System** — Complete light/dark theme support:
+  - **Theme Toggle** — Sun/moon emoji button in navbar to switch between light and dark modes
+  - **Theme Persistence** — Saves user preference to localStorage across sessions
+  - **System Preference Detection** — Automatically detects and uses system dark mode preference on first visit
+  - **Smooth Transitions** — CSS transitions for seamless theme switching
+  - **Tailwind Dark Classes** — Full dark mode support with `dark:` utility classes throughout the UI
+  - **ThemeContext Provider** — Centralized theme state management with React Context API
+
 ## Quick Start
 
 Prerequisites
