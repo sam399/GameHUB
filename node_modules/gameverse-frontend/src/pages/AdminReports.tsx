@@ -18,7 +18,7 @@ const AdminReports: React.FC = () => {
   const loadReports = async () => {
     try {
       const resp = await adminService.getReports({ limit: 50 });
-      const list = resp.data?.reports || resp.reports || resp.data;
+      const list = resp.data?.reports || [];
       setReports(list || []);
     } catch (err) {
       console.error('Failed to load reports', err);
@@ -30,7 +30,7 @@ const AdminReports: React.FC = () => {
   const loadModerators = async () => {
     try {
       const resp = await adminService.getUsers({ role: 'moderator', limit: 100 });
-      const list = resp.data?.users || resp.users || resp.data || [];
+      const list = resp.data?.users || [];
       setModerators(list);
       if (list.length && !selectedModerator) {
         setSelectedModerator(list[0]._id);

@@ -39,6 +39,7 @@ app.use('/api/wishlist', require('./routes/wishlist'));
 app.use('/api/library', require('./routes/library'));
 app.use('/api/admin', require('./routes/admin'));
 app.use('/api/reports', require('./routes/reports'));
+app.use('/api/moderation', require('./routes/moderationRoutes'));
 app.use('/api/leaderboards', require('./routes/leaderboards'));
 app.use('/api/achievements', require('./routes/achievements'));
 app.use('/api/feed', feedRoutes);

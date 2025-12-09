@@ -8,7 +8,7 @@ const AdminAuditLogs: React.FC = () => {
   const loadLogs = async () => {
     try {
       const resp = await adminService.getAuditLogs({ limit: 50 });
-      const list = resp.data?.logs || resp.logs || resp.data;
+      const list = resp.data?.logs || [];
       setLogs(list || []);
     } catch (err) {
       console.error('Failed to load audit logs', err);

@@ -34,6 +34,15 @@ Additional features added recently:
 
 - **Activity Search & Sorting** — Backend feed endpoint now supports pagination, filtering by activity type, and sorting. Frontend includes interactive controls for searching user activities and sorting by recency or popularity.
 
+- **Content Moderation System** — Comprehensive moderation tools for community safety:
+  - **User Reports** — Users can report inappropriate content (users, reviews, forum posts, games, messages) with severity levels and detailed descriptions
+  - **Moderation Queue** — Admin/moderator dashboard to view, assign, and resolve pending reports
+  - **Content Filter** — Automatic filtering of banned words in user-generated content (titles, comments, descriptions, bios)
+  - **Role-Based Access** — Dedicated admin and moderator roles with authorization middleware
+  - **Audit Logging** — All moderation actions tracked with timestamps, performer, and target details
+  - **Real-time Updates** — Socket.IO events notify admins instantly when new reports are created
+  - **Multiple Actions** — Delete content, ban users, or dismiss false reports with resolution notes
+
 ## Quick Start
 
 Prerequisites
@@ -109,15 +118,25 @@ Activity & Feed endpoints
 - `PATCH /api/notification-preferences/delivery` — update delivery method preferences (protected)
 - `PATCH /api/notification-preferences/email-digest` — update email digest settings (protected)
 
+Report & Moderation endpoints
+- `POST /api/reports` — create a report for inappropriate content (protected)
+- `GET /api/reports/user` — get current user's submitted reports (protected)
+- `GET /api/reports/:reportId` — get report details (protected)
+- `POST /api/moderation/report` — submit moderation report (protected)
+- `GET /api/moderation/queue` — get pending reports queue (admin/moderator only)
+- `PUT /api/moderation/resolve/:id` — resolve a report with action (admin/moderator only)
+
 Admin & moderation endpoints (examples)
 - `GET /api/admin/dashboard` — admin dashboard statistics (admin only)
 - `GET /api/admin/users` — list users (admin only)
 - `PUT /api/admin/users/:userId` — update user role/status (admin only)
-- `GET /api/admin/reports` — list reports (admin only)
+- `GET /api/admin/reports` — list reports with filtering and pagination (admin only)
 - `PUT /api/admin/reports/:reportId/assign` — assign report to moderator (admin only)
-- `PUT /api/admin/reports/:reportId/resolve` — resolve a report (admin only)
-- `GET /api/admin/audit-logs` — fetch audit logs (admin only)
+Realtime events (Socket.IO)
 
+- Server emits events like `friend_request:received`, `friend_request:accepted`, `friend_request:cancelled`, `friend:removed` to user rooms.
+- Admin events: `report.created`, `report.assigned`, `report.resolved` are emitted to the `admin_room` for real-time moderation dashboard updates.
+- The frontend connects using Socket.IO and listens to these events to refresh notifications and show transient toasts.
 Wishlist endpoints
 - `GET /api/wishlist` — user's wishlist
 - `PUT /api/wishlist/privacy` — toggle wishlist public/private
@@ -156,10 +175,20 @@ Troubleshooting
 
 - If you see `ECONNREFUSED` in the frontend, confirm the backend is running and reachable at the configured URL/port.
 - If Vite reports `Port 5173 in use` it will try another port; open the URL printed by Vite.
-
 Admin UI notes
 - The frontend includes a simple admin area at `/admin/*` (Dashboard, Users, Reports, Audit Logs, Moderation). Only users with `role: 'admin'` or `role: 'moderator'` can access these routes.
 - Admin clients join an `admin_room` socket on connect so server-side realtime events (report.created/assigned/resolved) are delivered to them.
+- The admin reports page includes quick Assign/Resolve actions (prompt-based). These call the admin APIs and trigger audit logs and realtime events.
+- **Moderation Queue** at `/admin/moderation` provides a quick view of pending reports with Delete Content and Dismiss actions.
+- **Report Button** component available for integration into ReviewCard, UserProfile, ForumPost, and other content areas.
+
+Content Moderation features
+- **Automatic Content Filtering**: Middleware filters banned words from titles, comments, descriptions, bios, and content fields
+- **User Reporting**: Users can report content with reasons (spam, harassment, inappropriate content, hate speech, etc.) and severity levels
+- **Moderation Actions**: Admins/moderators can delete content, ban users, or dismiss reports
+- **Duplicate Prevention**: System prevents users from submitting multiple reports for the same item
+- **Audit Trail**: All moderation actions are logged with performer, target, timestamp, and action details
+- **Role-Based Access**: Authorization middleware ensures only admins and moderators can access moderation endpoints
 - The admin reports page includes quick Assign/Resolve actions (prompt-based). These call the admin APIs and trigger audit logs and realtime events.
 
 

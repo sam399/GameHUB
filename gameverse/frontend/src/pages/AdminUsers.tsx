@@ -10,7 +10,7 @@ const AdminUsers: React.FC = () => {
   const loadUsers = async () => {
     try {
       const resp = await adminService.getUsers({ limit: 50 });
-      const list = resp.data?.users || resp.users || resp.data;
+      const list = resp.data?.users || [];
       setUsers(list || []);
     } catch (err) {
       console.error('Failed to load users', err);

@@ -24,3 +24,8 @@ router.delete('/:id', protect, deleteReview);
 router.post('/:id/react', protect, reactToReview);
 
 module.exports = router;
+const contentFilter = require('../middleware/contentFilter');
+
+// In your route definition:
+router.post('/', protect, contentFilter, createReview); 
+// Now, if a user sends "This game is s***!", it gets saved as "This game is ***!"
