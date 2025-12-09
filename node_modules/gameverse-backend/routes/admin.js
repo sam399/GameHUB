@@ -8,6 +8,7 @@ const {
   resolveReport,
   getAuditLogs,
   getAnalytics,
+  getAdminStats,
   bulkModerate
 } = require('../controllers/adminController');
 const { protect, authorize } = require('../middleware/auth');
@@ -36,5 +37,7 @@ router.get('/audit-logs', getAuditLogs);
 
 // Bulk actions
 router.post('/moderate/bulk', bulkModerate);
+
+router.get('/stats', getAdminStats);
 
 module.exports = router;

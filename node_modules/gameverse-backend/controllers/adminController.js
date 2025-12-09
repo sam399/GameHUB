@@ -7,6 +7,7 @@ const Report = require('../models/Report');
 const AuditLog = require('../models/AuditLog');
 const mongoose = require('mongoose');
 const realtime = require('../realtime');
+const Event = require('../models/Event');
 
 // @desc    Get admin dashboard statistics
 // @route   GET /api/admin/dashboard
@@ -705,5 +706,66 @@ exports.bulkModerate = async (req, res) => {
       message: 'Server error while performing bulk moderation',
       error: error.message
     });
+  }
+};
+
+// @desc    Get System Analytics
+// @route   GET /api/admin/stats
+// @access  Private/Admin
+exports.getAdminStats = async (req, res) => {
+  try {
+    const sixMonthsAgo = new Date();
+    sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
+
+    // 1. Basic Counts (Parallel execution for speed)
+    const [userCount, reviewCount, activeEventCount] = await Promise.all([
+      User.countDocuments(),
+      Review.countDocuments(),
+      Event.countDocuments({ status: { $in: ['UPCOMING', 'ONGOING'] } })
+    ]);
+
+    // 2. Aggregation: Users joined per month (Last 6 months, grouped by year/month)
+    const userGrowth = await User.aggregate([
+      { $match: { createdAt: { $gte: sixMonthsAgo } } },
+      {
+        $group: {
+          _id: { year: { $year: '$createdAt' }, month: { $month: '$createdAt' } },
+          count: { $sum: 1 }
+        }
+      },
+      { $sort: { '_id.year': 1, '_id.month': 1 } }
+    ]);
+
+    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const userGrowthChart = userGrowth.map(item => ({
+      month: `${monthNames[item._id.month - 1]} '${String(item._id.year).slice(-2)}`,
+      users: item.count
+    }));
+
+    // 3. Aggregation: Games per Genre (top 6)
+    const genreDistributionAgg = await Game.aggregate([
+      { $unwind: '$genre' },
+      { $group: { _id: '$genre', count: { $sum: 1 } } },
+      { $sort: { count: -1 } },
+      { $limit: 6 }
+    ]);
+
+    const genreDistribution = genreDistributionAgg.map(item => ({
+      name: item._id,
+      value: item.count
+    }));
+
+    res.status(200).json({
+      success: true,
+      data: {
+        counts: { users: userCount, reviews: reviewCount, activeEvents: activeEventCount },
+        charts: {
+          userGrowth: userGrowthChart,
+          genreDistribution
+        }
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
   }
 };

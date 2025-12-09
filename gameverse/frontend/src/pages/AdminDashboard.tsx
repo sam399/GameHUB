@@ -42,6 +42,7 @@ const AdminDashboard: React.FC = () => {
         <div className="admin-links">
           <Link to="/admin/users">Manage Users</Link>
           <Link to="/admin/reports">View Reports</Link>
+          <Link to="/admin/analytics">Analytics</Link>
           <Link to="/admin/audit-logs">Audit Logs</Link>
         </div>
         {!stats && <p>Loading stats...</p>}

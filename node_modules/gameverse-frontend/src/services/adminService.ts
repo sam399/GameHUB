@@ -9,8 +9,8 @@ export const adminService = {
   },
 
   async getAnalytics(period?: string): Promise<{ success: boolean; data: AnalyticsData }> {
-    const response = await api.get('/admin/analytics', { 
-      params: period ? { period } : {} 
+    const response = await api.get('/admin/stats', {
+      params: period ? { period } : {}
     });
     return response.data;
   },

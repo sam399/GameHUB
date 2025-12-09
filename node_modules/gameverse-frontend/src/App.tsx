@@ -23,6 +23,7 @@ import AdminUsers from './pages/AdminUsers';
 import AdminReports from './pages/AdminReports';
 import AdminAuditLogs from './pages/AdminAuditLogs';
 import AdminModeration from './pages/AdminModeration';
+import AnalyticsDashboard from './pages/Admin/AnalyticsDashboard';
 import NewsFeed from './pages/Home/NewsFeed';
 import { ThemeProvider } from './contexts/ThemeContext';
 
@@ -146,6 +147,11 @@ function AppContent() {
           <Route path="/admin/moderation" element={
             <AdminRoute>
               <AdminModeration />
+            </AdminRoute>
+          } />
+          <Route path="/admin/analytics" element={
+            <AdminRoute>
+              <AnalyticsDashboard />
             </AdminRoute>
           } />
         </Routes>

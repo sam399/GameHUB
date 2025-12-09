@@ -12,6 +12,7 @@ const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             <li><Link to="/admin/dashboard">Dashboard</Link></li>
             <li><Link to="/admin/users">Users</Link></li>
             <li><Link to="/admin/reports">Reports</Link></li>
+            <li><Link to="/admin/analytics">Analytics</Link></li>
             <li><Link to="/admin/audit-logs">Audit Logs</Link></li>
             <li><Link to="/admin/moderation">Moderation</Link></li>
           </ul>
