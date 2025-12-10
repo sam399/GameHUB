@@ -25,6 +25,7 @@ import AdminAuditLogs from './pages/AdminAuditLogs';
 import AdminModeration from './pages/AdminModeration';
 import AnalyticsDashboard from './pages/Admin/AnalyticsDashboard';
 import NewsFeed from './pages/Home/NewsFeed';
+import CinematicHome from './pages/Home/CinematicHome';
 import { ThemeProvider } from './contexts/ThemeContext';
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -62,17 +63,11 @@ function AppContent() {
     <div className="App">
       <Navbar />
       <Toasts />
-      <header className="App-header site-hero">
-        <div className="container">
-          <h1>🎮 GameVerse</h1>
-          <p className="hero-sub">AI-Powered Gaming Community Platform</p>
-          {/* hero content only; navigation is provided by Navbar */}
-        </div>
-      </header>
       
       <main>
         <Routes>
-          <Route path="/" element={<GameLibrary />} />
+          <Route path="/" element={<CinematicHome />} />
+          <Route path="/games" element={<GameLibrary />} />
           <Route path="/feed" element={
             <ProtectedRoute>
               <NewsFeed />

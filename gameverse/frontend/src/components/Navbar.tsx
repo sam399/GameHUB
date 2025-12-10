@@ -88,11 +88,11 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <header className="navbar">
+    <header className="navbar fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-black/30 border-b border-purple-500/20">
       <div className="container navbar-inner" style={{ position: 'relative' }}>
-        <Link to="/" className="brand" onClick={close}>
-          <span className="logo">🎮</span>
-          <span className="brand-text">GameVerse</span>
+        <Link to="/" className="brand flex items-center gap-3 hover:scale-105 transition-transform" onClick={close}>
+          <span className="logo text-4xl">🎮</span>
+          <span className="brand-text text-2xl font-black bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">GameVerse</span>
         </Link>
 
         <button
@@ -106,9 +106,9 @@ const Navbar: React.FC = () => {
         </button>
 
         <nav ref={navRef} className={`nav-links ${open ? 'open' : ''}`} role="navigation">
-          <Link to="/" className="nav-link" onClick={close}>Library</Link>
-          <Link to="/feed" className="nav-link" onClick={close}>Feed</Link>
-          <Link to="/featured" className="nav-link" onClick={close}>Featured</Link>
+          <Link to="/" className="nav-link text-purple-300 hover:text-purple-100 transition-colors" onClick={close}>Home</Link>
+          <Link to="/games" className="nav-link text-purple-300 hover:text-purple-100 transition-colors" onClick={close}>Library</Link>
+          <Link to="/feed" className="nav-link text-purple-300 hover:text-purple-100 transition-colors" onClick={close}>Feed</Link>
           {user ? (
             <>
               <Link to="/forum" className="nav-link" onClick={close}>Forum</Link>
@@ -127,7 +127,7 @@ const Navbar: React.FC = () => {
             </>
           ) : (
             <>
-              <Link to="/login" className="nav-link small-muted" onClick={close}>Login</Link>
+              <Link to="/login" className="nav-link small-muted" onClick={close}>🎮 Resume Game</Link>
               <ThemeToggle />
             </>
           )}
@@ -143,9 +143,9 @@ const Navbar: React.FC = () => {
                 )}
               </button>
               <div className={`user-dropdown ${open ? 'open' : ''}`} role="menu">
-                <Link to="/profile" className="dropdown-item" onClick={close}>Profile</Link>
+                <Link to="/profile" className="dropdown-item" onClick={close}>📊 Character Sheet</Link>
                 <Link to="/reviews" className="dropdown-item" onClick={close}>My Reviews</Link>
-                <button className="dropdown-item" onClick={handleLogout}>Logout</button>
+                <button className="dropdown-item" onClick={handleLogout}>🚪 Disconnect</button>
               </div>
             </div>
           )}

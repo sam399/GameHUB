@@ -9,7 +9,7 @@ const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         <h3>Admin</h3>
         <nav>
           <ul>
-            <li><Link to="/admin/dashboard">Dashboard</Link></li>
+            <li><Link to="/admin/dashboard">🎮 Command Center</Link></li>
             <li><Link to="/admin/users">Users</Link></li>
             <li><Link to="/admin/reports">Reports</Link></li>
             <li><Link to="/admin/analytics">Analytics</Link></li>

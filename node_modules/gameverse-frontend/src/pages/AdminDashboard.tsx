@@ -38,7 +38,7 @@ const AdminDashboard: React.FC = () => {
   return (
     <AdminLayout>
       <div className="admin-dashboard">
-        <h2>Admin Dashboard</h2>
+        <h2>🎮 Command Center</h2>
         <div className="admin-links">
           <Link to="/admin/users">Manage Users</Link>
           <Link to="/admin/reports">View Reports</Link>

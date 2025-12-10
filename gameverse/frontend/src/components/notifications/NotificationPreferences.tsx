@@ -111,11 +111,11 @@ const NotificationPreferences: React.FC = () => {
 
   return (
     <div className="max-w-2xl mx-auto p-6 space-y-8">
-      <h1 className="text-3xl font-bold text-white mb-8">Notification Preferences</h1>
+      <h1 className="text-3xl font-bold text-white mb-8">📡 Intel Center</h1>
 
       {/* Activity Notifications */}
       <section className="bg-gray-900 p-6 rounded-lg">
-        <h2 className="text-xl font-bold text-blue-400 mb-4">Activity Notifications</h2>
+        <h2 className="text-xl font-bold text-blue-400 mb-4">Activity Pings</h2>
         <div className="space-y-3">
           {Object.entries(preferences.activities).map(([key, value]) => (
             <label key={key} className="flex items-center space-x-3 cursor-pointer">

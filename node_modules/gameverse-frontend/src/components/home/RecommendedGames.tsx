@@ -59,7 +59,11 @@ const RecommendedGames = () => {
               </div>
             </div>
             <h3 className="text-white text-sm font-semibold mt-2 truncate">{game.title}</h3>
-            <span className="text-xs text-gray-400">{game.genre.split(',')[0]}</span>
+            <span className="text-xs text-gray-400">
+              {typeof game.genre === 'string' ? game.genre.split(',')[0] : 
+               Array.isArray(game.genre) ? game.genre[0] : 
+               game.genre}
+            </span>
           </Link>
         ))}
       </div>

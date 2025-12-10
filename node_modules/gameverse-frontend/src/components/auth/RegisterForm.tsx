@@ -27,7 +27,7 @@ const RegisterForm: React.FC = () => {
     try {
       await register(credentials);
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Registration failed');
+      setError(err.response?.data?.message || 'Spawn Failed');
     } finally {
       setLoading(false);
     }
@@ -42,7 +42,7 @@ const RegisterForm: React.FC = () => {
 
   return (
     <div className="auth-form">
-      <h2>Join GameVerse</h2>
+      <h2>⚔️ Create Character</h2>
       {error && <div className="error-message">{error}</div>}
       <form onSubmit={handleSubmit}>
         <div className="form-group">
@@ -90,7 +90,7 @@ const RegisterForm: React.FC = () => {
           />
         </div>
         <button type="submit" disabled={loading}>
-          {loading ? 'Creating Account...' : 'Register'}
+          {loading ? 'Spawning...' : '⚔️ Spawn In'}
         </button>
       </form>
     </div>

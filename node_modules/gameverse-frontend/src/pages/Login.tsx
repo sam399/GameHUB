@@ -8,7 +8,7 @@ const Login: React.FC = () => {
       <div className="auth-container">
         <LoginForm />
         <p className="auth-link">
-          Don't have an account? <Link to="/register">Register here</Link>
+          Don't have an account? <Link to="/register">Spawn In</Link>
         </p>
       </div>
     </div>

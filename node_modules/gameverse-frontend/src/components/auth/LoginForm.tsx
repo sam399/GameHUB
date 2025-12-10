@@ -19,7 +19,7 @@ const LoginForm: React.FC = () => {
     try {
       await login(credentials);
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Login failed');
+      setError(err.response?.data?.message || 'Connection Failed');
     } finally {
       setLoading(false);
     }
@@ -34,7 +34,7 @@ const LoginForm: React.FC = () => {
 
   return (
     <div className="auth-form">
-      <h2>Login to GameVerse</h2>
+      <h2>🎮 Resume Game</h2>
       {error && <div className="error-message">{error}</div>}
       <form onSubmit={handleSubmit}>
         <div className="form-group">
@@ -60,7 +60,7 @@ const LoginForm: React.FC = () => {
           />
         </div>
         <button type="submit" disabled={loading}>
-          {loading ? 'Logging in...' : 'Login'}
+          {loading ? 'Connecting...' : '🎮 Connect'}
         </button>
       </form>
     </div>

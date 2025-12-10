@@ -86,7 +86,7 @@ const AdminReports: React.FC = () => {
       <div className="admin-reports">
         <h2>Admin — Reports</h2>
         <div className="admin-links">
-          <Link to="/admin/dashboard">Back to Dashboard</Link>
+          <Link to="/admin/dashboard">← Back to Command Center</Link>
           <Link to="/admin/users">Manage Users</Link>
         </div>
 

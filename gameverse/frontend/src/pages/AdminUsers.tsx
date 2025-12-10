@@ -28,7 +28,7 @@ const AdminUsers: React.FC = () => {
       <div className="admin-users">
         <h2>Admin — Users</h2>
         <div className="admin-links">
-          <Link to="/admin/dashboard">Back to Dashboard</Link>
+          <Link to="/admin/dashboard">← Back to Command Center</Link>
           <Link to="/admin/reports">View Reports</Link>
         </div>
         {loading && <p>Loading users...</p>}
