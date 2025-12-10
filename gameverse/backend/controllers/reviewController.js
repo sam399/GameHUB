@@ -128,7 +128,11 @@ exports.createReview = async (req, res) => {
       // Emit activity_created event to all connected users
       realtime.io.emit('activity_created', {
         _id: null, // Will be populated by client if needed
-        user: { _id: req.userId, username: req.user.username, profile: req.user.profile },
+        user: { 
+          _id: req.userId, 
+          username: review.user.username, 
+          profile: review.user.profile 
+        },
         type: 'GAME_REVIEWED',
         data: {
           gameId: game._id,

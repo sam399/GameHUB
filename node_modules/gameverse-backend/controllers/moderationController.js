@@ -10,7 +10,7 @@ exports.createReport = async (req, res) => {
     const { targetId, targetType, reason, description } = req.body;
 
     const report = await Report.create({
-      reporter: req.user.id,
+      reporter: req.userId,
       targetId,
       targetType,
       reason,
@@ -67,7 +67,7 @@ exports.resolveReport = async (req, res) => {
     // 2. Update Report Status
     report.status = action === 'DISMISS' ? 'DISMISS' : 'RESOLVED';
     report.resolutionNote = resolutionNote || `Action taken: ${action}`;
-    report.resolvedBy = req.user.id;
+    report.resolvedBy = req.userId;
     await report.save();
 
     res.status(200).json({ success: true, message: `Report resolved: ${action}` });

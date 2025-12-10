@@ -5,10 +5,12 @@
 ## 🌟 Core Features
 
 ### 🎯 Gaming & Content
+
 - **Game Library** — Track your gaming collection with play status, hours played, completion percentage, and play sessions
 - **Reviews & Ratings** — Write detailed game reviews, rate games, and react to community reviews (helpful, funny, awards)
 - **Wishlist System** — Create and manage your game wishlist with public/private visibility toggle
 - **Game Discovery** — Browse games by genre, search, and view featured titles
+- **AI Recommendations** — Get personalized game suggestions based on your review history and genre preferences
 - **News Feed** — Stay updated with latest gaming news powered by RAWG API with Redis caching
 
 ### 👥 Social & Community
@@ -60,6 +62,8 @@
 - **Pagination** — Efficient data loading with pagination throughout the application
 
 ### 🔧 Technical Features
+
+- **AI Recommendation Engine** — Genre-based preference learning from user reviews with compatibility scoring
 - **Activity Hooks** — Automatic activity creation across all controllers with real-time broadcasts
 - **Redis Caching** — RAWG API news caching with 1-hour TTL and automatic fallback
 - **JWT Authentication** — Secure token-based authentication with refresh capability
@@ -287,6 +291,9 @@ The script will promote an existing user with that email to `admin` or create a 
 - `GET /api/achievements/user` — Get user's unlocked achievements (protected)
 - `POST /api/achievements/check` — Check and unlock achievements (protected)
 
+### Recommendation Endpoints
+- `GET /api/recommendations` — Get personalized game recommendations based on user reviews (protected)
+
 ### Report & Moderation Endpoints
 - `POST /api/reports` — Create a report (protected)
 - `GET /api/reports/user` — Get user's submitted reports (protected)
@@ -306,6 +313,7 @@ The script will promote an existing user with that email to `admin` or create a 
 - `PUT /api/admin/reports/:reportId/resolve` — Resolve report
 - `GET /api/admin/audit-logs` — Get audit logs
 - `POST /api/admin/moderate/bulk` — Bulk moderation actions
+
 ## 🔌 Real-time Events (Socket.IO)
 
 GameVerse uses Socket.IO for real-time features. The frontend connects and listens to these events:
@@ -431,8 +439,10 @@ GameVerse is production-ready with comprehensive deployment guides!
 ## 🎯 Key Features Summary
 
 ### For Users
+
 - 🎮 Track your gaming library and play sessions
 - ⭐ Review and rate games
+- 🤖 Get AI-powered personalized game recommendations
 - 👥 Connect with friends and chat in real-time
 - 🏆 Compete on leaderboards and unlock achievements
 - 📰 Stay updated with gaming news
@@ -450,7 +460,9 @@ GameVerse is production-ready with comprehensive deployment guides!
 - 🔨 Bulk moderation tools
 
 ### For Developers
+
 - 🏗️ Clean MVC architecture
+- 🤖 AI recommendation engine with genre-based learning
 - 🔌 Real-time Socket.IO integration
 - 🗃️ MongoDB with Mongoose ODM
 - 🔐 JWT authentication with middleware

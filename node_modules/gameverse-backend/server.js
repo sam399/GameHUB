@@ -45,6 +45,7 @@ app.use('/api/achievements', require('./routes/achievements'));
 app.use('/api/feed', feedRoutes);
 const eventRoutes = require('./routes/eventRoutes');
 app.use('/api/events', eventRoutes);
+app.use('/api/recommendations', require('./routes/recommendationRoutes'));
 // Basic route
 app.get('/api', (req, res) => {
   res.json({
@@ -64,7 +65,9 @@ app.get('/api', (req, res) => {
       reports: '/api/reports',
       leaderboards: '/api/leaderboards',
       achievements: '/api/achievements',
-      feed: '/api/feed'
+      feed: '/api/feed',
+      events: '/api/events',
+      recommendations: '/api/recommendations'
     }
   });
 });

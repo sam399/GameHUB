@@ -6,7 +6,7 @@ const Activity = require('../models/Activity'); // To log the creation in the fe
 exports.createEvent = async (req, res) => {
   try {
     // Add user to req.body as host
-    req.body.host = req.user.id;
+    req.body.host = req.userId;
 
     const event = await Event.create(req.body);
 
@@ -57,13 +57,13 @@ exports.joinEvent = async (req, res) => {
     }
 
     // Check if already registered
-    const isRegistered = event.participants.some(p => p.user.toString() === req.user.id);
+    const isRegistered = event.participants.some(p => p.user.toString() === req.userId);
     if (isRegistered) {
       return res.status(400).json({ success: false, message: 'Already registered' });
     }
 
     // Add participant
-    event.participants.push({ user: req.user.id });
+    event.participants.push({ user: req.userId });
     await event.save();
 
     res.status(200).json({ success: true, data: event });
