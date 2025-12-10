@@ -57,6 +57,16 @@ const userSchema = new mongoose.Schema({
     playstation: { type: String, default: '' }
   },
 
+  twoFactorSecret: {
+    type: String, // Stores the base32 secret key
+    select: false // Do not return this by default
+  },
+  
+  twoFactorEnabled: {
+    type: Boolean,
+    default: false
+  },
+
   isActive: { type: Boolean, default: true },
 
   adminSettings: {

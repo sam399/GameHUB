@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { friendService } from '../services/friendService';
 import { wishlistService } from '../services/wishlistService';
 import WishlistPrivacyToggle from '../components/wishlist/WishlistPrivacyToggle';
+import TwoFactorSetup from '../components/profile/TwoFactorSetup';
 import { Friend, FriendRequest } from '../types';
 import { useSocket } from '../contexts/SocketContext';
 
@@ -207,6 +208,11 @@ const Profile: React.FC = () => {
           {/* Extracted wishlist privacy toggle into a small component */}
           {/* @ts-ignore - dynamic import / no default export typing issues avoided by direct import */}
           <WishlistPrivacyToggle userId={user._id} />
+        </div>
+
+        <div className="profile-section">
+          <h3>Security Settings</h3>
+          <TwoFactorSetup />
         </div>
 
         <div className="profile-section">

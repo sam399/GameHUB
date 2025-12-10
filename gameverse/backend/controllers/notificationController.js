@@ -98,7 +98,7 @@ exports.getNotificationStats = async (req, res) => {
     const totalCount = await Notification.countDocuments({ user: req.userId, isActive: true });
 
     const typeStats = await Notification.aggregate([
-      { $match: { user: mongoose.Types.ObjectId(req.userId), isActive: true } },
+      { $match: { user: new mongoose.Types.ObjectId(req.userId), isActive: true } },
       { $group: { _id: '$type', count: { $sum: 1 } } },
       { $sort: { count: -1 } }
     ]);

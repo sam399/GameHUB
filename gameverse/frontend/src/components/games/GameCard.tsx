@@ -7,13 +7,14 @@ interface GameCardProps {
 }
 
 const GameCard: React.FC<GameCardProps> = ({ game }) => {
-  const formatPrice = (price: number, isFree: boolean) => {
-    if (isFree) return 'Free';
+  const formatPrice = (price?: number, isFree?: boolean) => {
+    if (isFree || !price) return 'Free';
     return `$${price.toFixed(2)}`;
   };
 
-  const renderRating = (rating: number) => {
-    return '★'.repeat(Math.round(rating)) + '☆'.repeat(5 - Math.round(rating));
+  const renderRating = (rating?: number) => {
+    const ratingValue = rating || 0;
+    return '★'.repeat(Math.round(ratingValue)) + '☆'.repeat(5 - Math.round(ratingValue));
   };
 
   return (
@@ -45,8 +46,8 @@ const GameCard: React.FC<GameCardProps> = ({ game }) => {
           
           <div className="game-card-footer">
             <div className="game-rating">
-              <span className="stars">{renderRating(game.rating.average)}</span>
-              <span className="rating-text">({game.rating.count})</span>
+              <span className="stars">{renderRating(game.rating?.average || game.rating)}</span>
+              <span className="rating-text">({game.rating?.count || 0})</span>
             </div>
             <div className="game-price">
               {formatPrice(game.price, game.isFree)}

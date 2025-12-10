@@ -49,20 +49,42 @@ const getExternalNews = async () => {
   return redisCache.getOrCompute(NEWS_CACHE_KEY, NEWS_CACHE_TTL, async () => {
     try {
       const apiKey = process.env.RAWG_API_KEY;
-      if (!apiKey || apiKey === 'your_rawg_api_key_here') {
+      const useRapidAPI = process.env.USE_RAPIDAPI === 'true';
+      const rapidAPIHost = process.env.RAPIDAPI_HOST;
+
+      if (!apiKey || apiKey === 'your_rawg_api_key_here' || apiKey === 'your_rapidapi_key_here') {
         console.warn('RAWG_API_KEY not set; using mock news data');
         return getMockNews();
       }
 
-      const response = await axios.get('https://api.rawg.io/api/games', {
-        params: {
-          key: apiKey,
-          dates: '2024-01-01,2025-12-31',
-          ordering: '-added',
-          page_size: 5
-        },
-        timeout: 5000
-      });
+      let response;
+      
+      if (useRapidAPI && rapidAPIHost) {
+        // Use RapidAPI endpoint
+        response = await axios.get(`https://${rapidAPIHost}/games`, {
+          headers: {
+            'x-rapidapi-key': apiKey,
+            'x-rapidapi-host': rapidAPIHost
+          },
+          params: {
+            dates: '2024-01-01,2025-12-31',
+            ordering: '-added',
+            page_size: 5
+          },
+          timeout: 5000
+        });
+      } else {
+        // Use direct RAWG API
+        response = await axios.get('https://api.rawg.io/api/games', {
+          params: {
+            key: apiKey,
+            dates: '2024-01-01,2025-12-31',
+            ordering: '-added',
+            page_size: 5
+          },
+          timeout: 5000
+        });
+      }
 
       return (response.data.results || []).map((game) => ({
         type: 'EXTERNAL_NEWS',

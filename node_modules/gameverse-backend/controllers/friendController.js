@@ -113,7 +113,7 @@ exports.sendFriendRequest = async (req, res) => {
       await AuditLog.logAction({
         action: 'friend_request_sent',
         performedBy: req.userId,
-        targetType: 'user',
+        targetType: 'User',
         targetId: toUserId,
         description: `Sent friend request to user ${toUserId}`,
         ipAddress: req.ip,
@@ -221,7 +221,7 @@ exports.acceptFriendRequest = async (req, res) => {
       await AuditLog.logAction({
         action: 'friend_request_accepted',
         performedBy: req.userId,
-        targetType: 'user',
+        targetType: 'User',
         targetId: fromUserId,
         description: `Accepted friend request from user ${fromUserId}`,
         ipAddress: req.ip,

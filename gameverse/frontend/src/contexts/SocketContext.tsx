@@ -44,7 +44,12 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
     try {
       const resp = await notificationService.getNotifications();
       const list = resp?.notifications || resp?.data?.notifications || resp;
-      setNotifications((list || []).map((n: any) => ({ ...n })));
+      // Ensure list is an array before mapping
+      if (Array.isArray(list)) {
+        setNotifications(list.map((n: any) => ({ ...n })));
+      } else {
+        setNotifications([]);
+      }
     } catch (err) {
       console.warn('Failed to refresh notifications:', err);
     }
@@ -61,9 +66,12 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
 
   useEffect(() => {
     if (user) {
-      // Vite exposes env vars on import.meta.env (VITE_ prefix). Fallback to localhost:5000.
-      const apiUrl = (import.meta as any).env?.VITE_API_URL || 'http://localhost:5000';
-      const newSocket = io(apiUrl, {
+      // Socket.IO connects to the base URL, not the /api path
+      // Extract base URL from VITE_API_URL or use default
+      const apiUrl = (import.meta as any).env?.VITE_API_URL || 'http://localhost:5000/api';
+      const baseUrl = apiUrl.replace('/api', '');
+      
+      const newSocket = io(baseUrl, {
         transports: ['websocket']
       });
 

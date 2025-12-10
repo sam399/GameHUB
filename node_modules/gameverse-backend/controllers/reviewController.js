@@ -54,6 +54,7 @@ exports.getGameReviews = async (req, res) => {
 exports.getUserReviews = async (req, res) => {
   try {
     const reviews = await Review.find({ user: req.userId })
+      .populate('user', 'username profile.avatar')
       .populate('game', 'title images.cover')
       .sort({ createdAt: -1 });
 
@@ -343,7 +344,7 @@ exports.getReviewStats = async (req, res) => {
     const stats = await Review.aggregate([
       {
         $match: { 
-          game: mongoose.Types.ObjectId(gameId),
+          game: new mongoose.Types.ObjectId(gameId),
           isActive: true 
         }
       },

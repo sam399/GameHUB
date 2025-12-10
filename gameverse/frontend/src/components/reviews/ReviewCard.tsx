@@ -47,14 +47,19 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ review, onUpdate, onDelete }) =
     return '★'.repeat(rating) + '☆'.repeat(5 - rating);
   };
 
-  const isOwnReview = user && user._id === review.user._id;
+  const isOwnReview = user && review.user && user._id === review.user._id;
+
+  // Handle case where user data is missing
+  if (!review.user) {
+    return null;
+  }
 
   return (
     <div className="review-card">
       <div className="review-header">
         <div className="reviewer-info">
           <div className="reviewer-avatar">
-            {review.user.profile.avatar ? (
+            {review.user.profile?.avatar ? (
               <img src={review.user.profile.avatar} alt={review.user.username} />
             ) : (
               <div className="avatar-placeholder">

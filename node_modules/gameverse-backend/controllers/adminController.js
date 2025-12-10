@@ -239,7 +239,7 @@ exports.updateUser = async (req, res) => {
     await AuditLog.logAction({
       action: 'user_updated',
       performedBy: req.userId,
-      targetType: 'user',
+      targetType: 'User',
       targetId: userId,
       description: `Admin updated user ${user.username}`,
       changes: {

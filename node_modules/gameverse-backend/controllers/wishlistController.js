@@ -187,7 +187,7 @@ exports.togglePrivacy = async (req, res) => {
       await AuditLog.logAction({
         action: 'wishlist_privacy_changed',
         performedBy: req.userId,
-        targetType: 'user',
+        targetType: 'User',
         targetId: req.userId,
         description: `Toggled wishlist privacy to ${wishlist.isPublic ? 'public' : 'private'}`,
         ipAddress: req.ip,
