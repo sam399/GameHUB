@@ -1,6 +1,7 @@
 import React, { useRef, useMemo, useEffect } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
+import { useTheme } from '../../contexts/ThemeContext';
 
 interface HexGridProps {
   mousePosition: { x: number; y: number };
@@ -165,6 +166,7 @@ const ParticleField: React.FC = () => {
 export const LivingBackground: React.FC = () => {
   const [mousePosition, setMousePosition] = React.useState({ x: 0, y: 0 });
   const [scrollProgress, setScrollProgress] = React.useState(0);
+  const { theme } = useTheme();
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -203,8 +205,8 @@ export const LivingBackground: React.FC = () => {
           pointerEvents: 'none'
         }}
       >
-        <color attach="background" args={['#050508']} />
-        <fog attach="fog" args={['#050508', 10, 30]} />
+        <color attach="background" args={[theme === 'dark' ? '#050508' : '#ffffff']} />
+        <fog attach="fog" args={[theme === 'dark' ? '#050508' : '#ffffff', 10, 30]} />
         
         <ambientLight intensity={0.2} />
         <pointLight position={[10, 10, 10]} intensity={0.5} color="#00f7ff" />

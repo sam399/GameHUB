@@ -85,6 +85,26 @@ body {
   min-height: 100vh;
 }
 
+/* Light Theme Overrides */
+html.light {
+  /* Background & Surfaces */
+  --nexus-void-black: #ffffff; /* top of gradient */
+  --nexus-midnight-blue: #f5f7fb; /* bottom of gradient */
+  --nexus-deep-space: #eef1f7;
+
+  /* Text */
+  --nexus-text-primary: #0a0a14;
+  --nexus-text-secondary: rgba(10, 10, 20, 0.8);
+  --nexus-text-muted: rgba(10, 10, 20, 0.6);
+  --nexus-text-disabled: rgba(10, 10, 20, 0.4);
+
+  /* Borders & Surfaces */
+  --nexus-border: rgba(0, 0, 0, 0.12);
+  --nexus-border-hover: rgba(0, 0, 0, 0.25);
+  --nexus-surface: rgba(255, 255, 255, 0.9);
+  --nexus-surface-elevated: rgba(255, 255, 255, 0.95);
+}
+
 /* Typography */
 h1, h2, h3, h4, h5, h6 {
   font-weight: 700;
