@@ -60,6 +60,7 @@ export interface Game {
   images: {
     cover: string;
     screenshots: string[];
+    banner?: string;
   };
   website: string;
   price: number;
@@ -85,6 +86,9 @@ export interface Game {
   active: boolean;
   createdAt: string;
   updatedAt: string;
+  trailerUrl?: string;
+  videoUrl?: string;
+  brandColor?: string;
 }
 
 export interface GamesResponse {

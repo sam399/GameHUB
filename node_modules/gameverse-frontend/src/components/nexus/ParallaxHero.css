@@ -1,0 +1,434 @@
+.parallax-hero {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  perspective: 1000px;
+  background: linear-gradient(180deg, #050508 0%, #0a0a14 100%);
+}
+
+.hero-background-layer {
+  position: absolute;
+  top: -10%;
+  left: -10%;
+  width: 120%;
+  height: 120%;
+  z-index: 1;
+}
+
+.hero-grid-overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    linear-gradient(rgba(0, 247, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 247, 255, 0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+  animation: grid-scroll 20s linear infinite;
+}
+
+.hero-gradient-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.4;
+  animation: orb-float 8s ease-in-out infinite;
+}
+
+.hero-gradient-orb.orb-1 {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, #00f7ff 0%, transparent 70%);
+  top: 20%;
+  left: 10%;
+}
+
+.hero-gradient-orb.orb-2 {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, #ff00e5 0%, transparent 70%);
+  bottom: 20%;
+  right: 10%;
+  animation-delay: -4s;
+}
+
+.hero-particles {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+}
+
+.hero-particle {
+  position: absolute;
+  background: #00f7ff;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #00f7ff;
+  pointer-events: none;
+}
+
+.hero-character {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+  transform-style: preserve-3d;
+  width: 600px;
+  height: 600px;
+}
+
+.character-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 120%;
+  height: 120%;
+  background: radial-gradient(circle, rgba(0, 247, 255, 0.2) 0%, transparent 60%);
+  border-radius: 50%;
+  animation: character-glow-pulse 3s ease-in-out infinite;
+}
+
+.character-image-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.character-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 0 40px rgba(0, 247, 255, 0.5));
+}
+
+.character-fallback {
+  position: absolute;
+  width: 300px;
+  height: 400px;
+}
+
+.character-silhouette {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, #00f7ff 0%, #ff00e5 100%);
+  clip-path: polygon(
+    50% 0%, 
+    60% 10%, 70% 20%, 75% 35%, 80% 50%,
+    75% 65%, 70% 75%, 60% 85%, 55% 100%,
+    45% 100%, 40% 85%, 30% 75%, 25% 65%,
+    20% 50%, 25% 35%, 30% 20%, 40% 10%
+  );
+  opacity: 0.8;
+  filter: blur(2px);
+  animation: silhouette-pulse 2s ease-in-out infinite;
+}
+
+.character-particles {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+
+.character-particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: #ff00e5;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #ff00e5;
+  animation: character-particle-float 3s ease-in-out infinite;
+}
+
+.character-particle:nth-child(odd) {
+  background: #00f7ff;
+  box-shadow: 0 0 10px #00f7ff;
+}
+
+.hero-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 4;
+  text-align: center;
+  width: 90%;
+  max-width: 1200px;
+}
+
+.hero-title-container {
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.hero-title {
+  font-size: 6rem;
+  font-weight: 900;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin: 0;
+  line-height: 1;
+  text-shadow: 
+    0 0 20px rgba(0, 247, 255, 0.8),
+    0 0 40px rgba(0, 247, 255, 0.5),
+    0 0 60px rgba(0, 247, 255, 0.3);
+}
+
+.hero-title-char {
+  display: inline-block;
+  animation: title-char-glow 2s ease-in-out infinite;
+}
+
+.hero-title-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, #00f7ff, transparent);
+  opacity: 0;
+  animation: title-glow-sweep 3s ease-in-out infinite;
+  filter: blur(20px);
+}
+
+.hero-description {
+  font-size: 1.5rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 3rem;
+  letter-spacing: 0.05em;
+  text-shadow: 0 0 10px rgba(0, 247, 255, 0.3);
+}
+
+.hero-cta-button {
+  position: relative;
+  padding: 1.5rem 4rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #ffffff;
+  background: rgba(0, 247, 255, 0.1);
+  border: 2px solid #00f7ff;
+  border-radius: 0;
+  cursor: none;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.button-text {
+  position: relative;
+  z-index: 2;
+  transition: color 0.3s ease;
+}
+
+.hero-cta-button:hover .button-text {
+  color: #00f7ff;
+}
+
+.button-border {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 2px solid #00f7ff;
+  z-index: 1;
+  animation: button-border-pulse 2s ease-in-out infinite;
+}
+
+.button-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, rgba(0, 247, 255, 0.4) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 0;
+}
+
+.hero-cta-button:hover .button-glow {
+  opacity: 1;
+  animation: button-glow-pulse 1s ease-in-out infinite;
+}
+
+.button-spark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 4px;
+  height: 4px;
+  background: #ff00e5;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #ff00e5;
+  pointer-events: none;
+}
+
+.button-shockwave {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  border: 3px solid #00f7ff;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.hero-scanlines {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 247, 255, 0.03) 2px,
+    rgba(0, 247, 255, 0.03) 4px
+  );
+  pointer-events: none;
+  z-index: 10;
+  animation: scanlines-move 8s linear infinite;
+}
+
+/* Animations */
+@keyframes grid-scroll {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(50px);
+  }
+}
+
+@keyframes orb-float {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(30px, -30px) scale(1.1);
+  }
+}
+
+@keyframes character-glow-pulse {
+  0%, 100% {
+    opacity: 0.3;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+}
+
+@keyframes silhouette-pulse {
+  0%, 100% {
+    opacity: 0.8;
+    filter: blur(2px);
+  }
+  50% {
+    opacity: 1;
+    filter: blur(1px);
+  }
+}
+
+@keyframes character-particle-float {
+  0%, 100% {
+    transform: translate(0, 0);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translate(
+      calc((var(--random-x, 0.5) - 0.5) * 40px),
+      calc((var(--random-y, 0.5) - 0.5) * 40px)
+    );
+    opacity: 1;
+  }
+}
+
+@keyframes title-char-glow {
+  0%, 100% {
+    opacity: 1;
+    filter: brightness(1);
+  }
+  50% {
+    opacity: 0.9;
+    filter: brightness(1.2);
+  }
+}
+
+@keyframes title-glow-sweep {
+  0%, 100% {
+    opacity: 0;
+    left: -100%;
+  }
+  50% {
+    opacity: 0.3;
+    left: 150%;
+  }
+}
+
+@keyframes button-border-pulse {
+  0%, 100% {
+    box-shadow: 
+      0 0 10px #00f7ff,
+      inset 0 0 10px #00f7ff;
+  }
+  50% {
+    box-shadow: 
+      0 0 20px #00f7ff,
+      inset 0 0 20px #00f7ff;
+  }
+}
+
+@keyframes button-glow-pulse {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.2);
+  }
+}
+
+@keyframes scanlines-move {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(4px);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 3rem;
+  }
+
+  .hero-description {
+    font-size: 1rem;
+  }
+
+  .hero-cta-button {
+    padding: 1rem 2rem;
+    font-size: 1rem;
+  }
+
+  .hero-character {
+    width: 400px;
+    height: 400px;
+  }
+}

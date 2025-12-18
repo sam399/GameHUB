@@ -5,9 +5,10 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Profile from './pages/Profile';
 import './App.css';
+import './styles/nexus-theme.css';
 import GameLibrary from './pages/GameLibrary';
 import GameDetails from './pages/GameDetails';
-import Navbar from './components/Navbar';
+import NexusNavbar from './components/nexus/NexusNavbar';
 import Toasts from './components/notifications/Toasts';
 import UserReviews from './pages/UserReviews';
 import ForumHome from './pages/ForumHome';
@@ -25,8 +26,10 @@ import AdminAuditLogs from './pages/AdminAuditLogs';
 import AdminModeration from './pages/AdminModeration';
 import AnalyticsDashboard from './pages/Admin/AnalyticsDashboard';
 import NewsFeed from './pages/Home/NewsFeed';
-import CinematicHome from './pages/Home/CinematicHome';
+import NexusHome from './pages/Home/NexusHome';
 import { ThemeProvider } from './contexts/ThemeContext';
+import { DroneCursor } from './components/nexus/DroneCursor';
+import { LivingBackground } from './components/nexus/LivingBackground';
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user, loading } = useAuth();
@@ -61,12 +64,16 @@ function AppContent() {
 
   return (
     <div className="App">
-      <Navbar />
+      {/* Nexus Interface Elements */}
+      <DroneCursor />
+      <LivingBackground />
+      
+      <NexusNavbar />
       <Toasts />
       
-      <main>
+      <main style={{ position: 'relative', zIndex: 1 }}>
         <Routes>
-          <Route path="/" element={<CinematicHome />} />
+          <Route path="/" element={<NexusHome />} />
           <Route path="/games" element={<GameLibrary />} />
           <Route path="/feed" element={
             <ProtectedRoute>

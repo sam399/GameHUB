@@ -1,0 +1,174 @@
+.drone-cursor {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  width: 32px;
+  height: 32px;
+  transform: translate(-50%, -50%);
+  will-change: transform;
+}
+
+.drone-body {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.drone-core {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 8px;
+  height: 8px;
+  background: #00f7ff;
+  border-radius: 50%;
+  box-shadow: 
+    0 0 10px #00f7ff,
+    0 0 20px #00f7ff,
+    inset 0 0 5px #ffffff;
+  animation: drone-pulse 2s ease-in-out infinite;
+}
+
+.drone-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 24px;
+  height: 24px;
+  border: 2px solid rgba(0, 247, 255, 0.4);
+  border-radius: 50%;
+  animation: drone-rotate 4s linear infinite;
+}
+
+.drone-ring::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  background: #ff00e5;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #ff00e5;
+}
+
+.drone-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 32px;
+  height: 32px;
+  background: radial-gradient(circle, rgba(0, 247, 255, 0.3) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: drone-glow 2s ease-in-out infinite;
+}
+
+.exhaust-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.exhaust-particle {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  background: #00f7ff;
+  border-radius: 50%;
+  opacity: 0;
+  animation: exhaust-drift 1.5s ease-out infinite;
+}
+
+.exhaust-particle:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.exhaust-particle:nth-child(2) {
+  animation-delay: 0.5s;
+}
+
+.exhaust-particle:nth-child(3) {
+  animation-delay: 1s;
+}
+
+.drone-cursor.clicking .drone-core {
+  background: #ff00e5;
+  box-shadow: 
+    0 0 15px #ff00e5,
+    0 0 30px #ff00e5,
+    inset 0 0 8px #ffffff;
+}
+
+.drone-cursor.clicking .drone-ring {
+  border-color: rgba(255, 0, 229, 0.6);
+}
+
+.cursor-pulse {
+  position: fixed;
+  width: 40px;
+  height: 40px;
+  border: 2px solid #00f7ff;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 9997;
+  box-shadow: 
+    0 0 20px rgba(0, 247, 255, 0.6),
+    inset 0 0 20px rgba(0, 247, 255, 0.4);
+}
+
+@keyframes drone-pulse {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.2);
+    opacity: 0.8;
+  }
+}
+
+@keyframes drone-rotate {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+@keyframes drone-glow {
+  0%, 100% {
+    opacity: 0.4;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+}
+
+@keyframes exhaust-drift {
+  0% {
+    transform: translate(0, 0);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translate(calc(var(--random-x, 0) * 10px), 20px);
+    opacity: 0;
+  }
+}
+
+/* Hide default cursor */
+body,
+button,
+a,
+input,
+textarea {
+  cursor: none !important;
+}
