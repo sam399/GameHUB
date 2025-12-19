@@ -16,6 +16,7 @@
 - ✅ **Profile Dropdown**: Click-based menu now working properly
 - ✅ **All Core Features**: Tested and working properly
 - ✅ **Codebase Cleanup**: Removed 27 legacy files and external API dependencies
+- ✅ **Netlify + Render Ready**: Frontend ships via [netlify.toml](netlify.toml); backend deploys with [render.yaml](render.yaml) + `/api/health` uptime checks
 
 ## 🎨 The Nexus Interface
 
@@ -203,6 +204,13 @@ Create a `.env` file in `gameverse/frontend`:
 VITE_API_URL=http://localhost:5000
 ```
 
+For Netlify Dev locally, set `VITE_API_URL=http://localhost:8888/.netlify/functions/api` to match the proxy.
+
+**Production (Netlify + Render) templates**
+
+- Backend: copy [gameverse/backend/.env.example](gameverse/backend/.env.example) into `gameverse/backend/.env` and set `FRONTEND_URL` to your Netlify domain
+- Frontend: copy [gameverse/frontend/.env.example](gameverse/frontend/.env.example) into `gameverse/frontend/.env` and set `VITE_API_URL`/`VITE_SOCKET_URL` to your Render backend
+
 ### Installation & Running
 
 **1. Start the backend API**
@@ -236,6 +244,16 @@ npm run dev
 
 The frontend will start on `http://localhost:5173` or another available port shown by Vite.
 
+**4. Full-stack via Netlify Dev (optional)**
+
+```powershell
+cd "H:\My Website\GameHUB"
+npm install -g netlify-cli
+npm run dev:netlify
+```
+
+Netlify Dev serves the Vite build and proxies API calls to `/.netlify/functions/api` on `http://localhost:8888`.
+
 **4. Create an admin user (optional)**
 
 Use the convenience script to create or promote an admin user:
@@ -253,6 +271,7 @@ The script will promote an existing user with that email to `admin` or create a 
 - **TypeScript checks**: Run `npx tsc --noEmit` in the frontend directory
 - **Hot reloading**: Both frontend (Vite) and backend (nodemon) support hot reloading
 - **Port conflicts**: If port 5000 or 5173 is in use, either free it or set a different `PORT` in the backend `.env`
+- **Single command (Netlify Dev)**: `npm run dev:netlify` proxies API to `/.netlify/functions/api` on port 8888
 
 ### Codebase Cleanup & Refactoring
 
@@ -265,6 +284,11 @@ This project was recently refactored to remove legacy code and external API depe
 - **See [REFACTOR_SUMMARY.md](./REFACTOR_SUMMARY.md) for complete details of all changes**
 
 ## 📡 API Documentation
+
+**Netlify routing:** when running via Netlify Functions, prefix endpoints with `/.netlify/functions/api` (e.g., `/.netlify/functions/api/games`).
+
+### System Endpoints
+- `GET /api/health` — Health/uptime check (works on local server, Netlify Functions, and Render)
 
 ### Authentication Endpoints
 - `POST /api/auth/register` — Register a new user account
@@ -564,6 +588,22 @@ Once enabled, the login flow changes:
 - Authy (iOS, Android, Desktop)
 - 1Password (with TOTP support)
 - Any RFC 6238 compliant TOTP app
+
+## ☁️ Deployment on Netlify + Render
+
+Recommended production path: Netlify hosts the Vite frontend; Render runs the full Express + Socket.io backend.
+
+**Quick Path (10–15 minutes)**
+1. Deploy backend to Render: follow [RENDER_DEPLOYMENT_GUIDE.md](RENDER_DEPLOYMENT_GUIDE.md) or use [render.yaml](render.yaml) (`rootDir: gameverse/backend`, health check `/api/health`).
+2. Set Render env vars: `MONGODB_URI`, `JWT_SECRET`, `JWT_EXPIRE`, `FRONTEND_URL`, `PORT=10000`.
+3. Update Netlify env vars: `VITE_API_URL=https://<your-render>.onrender.com/api`, `VITE_SOCKET_URL=https://<your-render>.onrender.com`.
+4. Deploy frontend to Netlify (auto-picks [netlify.toml](netlify.toml); publish `gameverse/frontend/dist`).
+5. Verify `/api/health` and UI calls from `https://<your-site>.netlify.app` hit the Render backend.
+
+**More Help**
+- Migration overview: [MIGRATION_SUMMARY.md](MIGRATION_SUMMARY.md)
+- Detailed Netlify steps: [NETLIFY_MIGRATION_GUIDE.md](NETLIFY_MIGRATION_GUIDE.md)
+- Architecture summary: [RENDER_NETLIFY_INTEGRATION.md](RENDER_NETLIFY_INTEGRATION.md)
 
 ## ☁️ Deployment on Vercel
 
