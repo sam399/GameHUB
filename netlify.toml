@@ -2,16 +2,18 @@
 # Documentation: https://docs.netlify.com/configure-builds/file-conventions/
 
 [build]
-  # Frontend build command
-  command = "npm run build:netlify"
-  # Directory to deploy (must be frontend dist)
-  publish = "gameverse/frontend/dist"
-  # Functions directory
+  # Build from the frontend subdirectory
+  base = "gameverse/frontend"
+  # Install dev deps and build the frontend
+  command = "npm ci --include=dev && npm run build"
+  # Directory to deploy (relative to base)
+  publish = "dist"
+  # Functions directory (relative to repo root)
   functions = "netlify/functions"
 
 [build.environment]
-  # Node version
-  NODE_VERSION = "20.11.0"
+  # Use a Node version compatible with Vite 7
+  NODE_VERSION = "22.12.0"
   # Package manager
   NPM_VERSION = "10.x"
 
