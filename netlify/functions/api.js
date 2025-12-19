@@ -115,59 +115,27 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Netlify Function handler
+// Netlify Function handler using serverless-http to wrap Express
+const serverless = require('serverless-http');
+
+const handler = serverless(app);
+
 exports.handler = async (event, context) => {
-  // Prevent function from terminating before response
   context.callbackWaitsForEmptyEventLoop = false;
-
   try {
-    // Connect to MongoDB
     await connectDB();
-
-    // Handle the request
-    return new Promise((resolve, reject) => {
-      app(
-        {
-          ...event,
-          requestContext: event.requestContext || {}
-        },
-        {
-          statusCode: 200,
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ message: 'ok' }),
-          setHeader: () => {},
-          end: (body) => {
-            resolve({
-              statusCode: 200,
-              headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': process.env.FRONTEND_URL || '*',
-                'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-                'Access-Control-Allow-Headers': 'Content-Type, Authorization'
-              },
-              body: body || JSON.stringify({ message: 'ok' })
-            });
-          }
-        },
-        (result) => {
-          if (result?.statusCode) {
-            resolve(result);
-          }
-        }
-      );
-    });
+    return handler(event, context);
   } catch (error) {
     console.error('Function error:', error);
     return {
       statusCode: 500,
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': process.env.FRONTEND_URL || '*',
+        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization'
       },
-      body: JSON.stringify({
-        error: error.message || 'Internal Server Error'
-      })
+      body: JSON.stringify({ error: error.message || 'Internal Server Error' })
     };
   }
 };
