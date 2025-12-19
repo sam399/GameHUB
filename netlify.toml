@@ -35,7 +35,6 @@
   from = "/*"
   to = "/index.html"
   status = 200
-  conditions = { NOT = [{Role = "Admin"}] }
 
 # Headers for security and caching
 [[headers]]
