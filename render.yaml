@@ -7,8 +7,8 @@ services:
     env: node
     region: oregon
     plan: free
-    buildCommand: npm install
-    startCommand: npm start
+    buildCommand: cd gameverse/backend && npm install
+    startCommand: cd gameverse/backend && npm start
     healthCheckPath: /api/health
     
     # Environment variables (set these in Render dashboard)
