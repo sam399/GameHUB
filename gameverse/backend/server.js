@@ -29,6 +29,15 @@ app.use(cors());
 app.use(express.json());
 
 // Routes
+app.get('/api/health', (req, res) => {
+  res.json({
+    status: 'ok',
+    service: 'gameverse-backend',
+    uptime: process.uptime(),
+    timestamp: new Date().toISOString()
+  });
+});
+
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/games', require('./routes/games'));
 app.use('/api/reviews', require('./routes/reviews'));
