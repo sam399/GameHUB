@@ -25,10 +25,17 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   // 2. Apply the theme class to the HTML element
   useEffect(() => {
     const root = window.document.documentElement;
-    
-    // Remove the old theme class and add the new one
+    const body = window.document.body;
+
+    // Remove the old theme class and add the new one on both html and body
     root.classList.remove('light', 'dark');
+    body.classList.remove('light', 'dark');
     root.classList.add(theme);
+    body.classList.add(theme);
+
+    // Expose theme as data attribute for CSS fallbacks
+    root.setAttribute('data-theme', theme);
+    body.setAttribute('data-theme', theme);
 
     // Save to local storage
     localStorage.setItem('gameverse-theme', theme);

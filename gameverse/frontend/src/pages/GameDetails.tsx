@@ -10,6 +10,7 @@ import ReviewStats from '../components/reviews/ReviewStats';
 import { on as realtimeOn, off as realtimeOff } from '../services/realtime';
 import WishlistButton from '../components/games/WishlistButton';
 import TrackGameButton from '../components/games/TrackGameButton';
+import './GameDetails.css';
 const GameDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { user } = useAuth();
@@ -66,8 +67,10 @@ const GameDetails: React.FC = () => {
         reviewService.getGameReviews(gameId),
         reviewService.getReviewStats(gameId)
       ]);
-      
-      setGame(gameResponse.data.game);
+
+      // API returns { success, data: game } for getGame. Fall back if wrapped.
+      const resolvedGame = gameResponse?.data?.game ?? gameResponse?.data;
+      setGame(resolvedGame);
       setReviews(reviewsResponse.data.reviews);
       setReviewStats(statsResponse.data);
     } catch (error) {
@@ -141,77 +144,208 @@ const GameDetails: React.FC = () => {
     return <div className="error">Game not found</div>;
   }
 
-  // ... (keep existing game details rendering code)
-
   return (
     <div className="game-details">
-      <div className="game-actions">
-        <WishlistButton game={game} size="large" showText />
-        <TrackGameButton game={game} />
-      </div>
-      
-      {/* Add reviews section */}
-      <section className="game-reviews">
-        <div className="reviews-header">
-          <h2>Player Reviews</h2>
-          {reviewStats && (
-            <ReviewStats 
-              stats={reviewStats} 
-              averageRating={game.rating.average} 
-            />
-          )}
+      {/* Game Header Section */}
+      <div className="game-header" style={{
+        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(${game.images.cover})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center'
+      }}>
+        <div className="container">
+          <div className="game-header-content">
+            <div className="game-cover">
+              <img src={game.images.cover} alt={game.title} />
+              {game.featured && <div className="featured-badge">Featured</div>}
+            </div>
+            
+            <div className="game-info">
+              <h1>{game.title}</h1>
+              <p className="game-meta">
+                <span className="developer">{game.developer}</span>
+                <span className="separator">•</span>
+                <span className="publisher">{game.publisher}</span>
+                <span className="separator">•</span>
+                <span className="release-date">{new Date(game.releaseDate).getFullYear()}</span>
+              </p>
+              
+              <div className="game-rating-section">
+                <div className="rating-display">
+                  <span className="rating-value">{game.rating.average.toFixed(1)}</span>
+                  <span className="rating-max">/5</span>
+                  <span className="rating-count">({game.rating.count} reviews)</span>
+                </div>
+              </div>
+
+              <div className="game-genres">
+                {game.genre.map(genre => (
+                  <span key={genre} className="genre-badge">{genre}</span>
+                ))}
+              </div>
+
+              <div className="game-platforms">
+                <h4>Platforms:</h4>
+                {game.platforms.map(platform => (
+                  <span key={platform} className="platform-badge">{platform}</span>
+                ))}
+              </div>
+
+              <div className="game-price-section">
+                <div className="price">
+                  {game.isFree || game.price === 0 ? (
+                    <span className="free">Free to Play</span>
+                  ) : (
+                    <span className="paid">${game.price.toFixed(2)}</span>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="game-actions">
+            <WishlistButton game={game} size="large" showText />
+            <TrackGameButton game={game} />
+          </div>
         </div>
-         
-        <div className="reviews-content">
-          <div className="reviews-actions">
-            {user && !userHasReviewed && !showReviewForm && (
-              <button 
-                className="write-review-btn"
-                onClick={() => setShowReviewForm(true)}
-              >
-                Write a Review
-              </button>
+      </div>
+
+      {/* Game Description Section */}
+      <div className="container">
+        <div className="game-main-content">
+          <main className="game-description-section">
+            <h2>About This Game</h2>
+            <p className="game-description">{game.description}</p>
+
+            {game.images.screenshots && game.images.screenshots.length > 0 && (
+              <div className="screenshots-section">
+                <h3>Screenshots</h3>
+                <div className="screenshots-grid">
+                  {game.images.screenshots.map((screenshot, index) => (
+                    <div key={index} className="screenshot-item">
+                      <img src={screenshot} alt={`Screenshot ${index + 1}`} />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </main>
+
+          <aside className="game-sidebar">
+            <div className="game-info-box">
+              <h3>Game Information</h3>
+              <div className="info-item">
+                <label>Developer</label>
+                <p>{game.developer}</p>
+              </div>
+              <div className="info-item">
+                <label>Publisher</label>
+                <p>{game.publisher}</p>
+              </div>
+              <div className="info-item">
+                <label>Release Date</label>
+                <p>{new Date(game.releaseDate).toLocaleDateString()}</p>
+              </div>
+              <div className="info-item">
+                <label>Platforms</label>
+                <p>{game.platforms.join(', ')}</p>
+              </div>
+              <div className="info-item">
+                <label>Genres</label>
+                <p>{game.genre.join(', ')}</p>
+              </div>
+              <div className="info-item">
+                <label>Price</label>
+                <p>
+                  {game.isFree || game.price === 0 ? (
+                    <span className="free">Free to Play</span>
+                  ) : (
+                    <span className="paid">${game.price.toFixed(2)}</span>
+                  )}
+                </p>
+              </div>
+              {game.tags && game.tags.length > 0 && (
+                <div className="info-item">
+                  <label>Tags</label>
+                  <div className="tags-list">
+                    {game.tags.map(tag => (
+                      <span key={tag} className="tag">{tag}</span>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </aside>
+        </div>
+      </div>
+
+      {/* Reviews Section */}
+      <div className="container">
+        <section className="game-reviews">
+          <div className="reviews-header">
+            <h2>Player Reviews</h2>
+            {reviewStats && (
+              <ReviewStats 
+                stats={reviewStats} 
+                averageRating={game.rating.average} 
+              />
             )}
           </div>
-
-          {showReviewForm && (
-            <div className="review-form-section">
-              <ReviewForm
-                gameId={id!}
-                existingReview={editingReview}
-                onSubmit={handleSubmitReview}
-                onCancel={() => {
-                  setShowReviewForm(false);
-                  setEditingReview(null);
-                }}
-                loading={submittingReview}
-              />
+           
+          <div className="reviews-content">
+            <div className="reviews-actions">
+              {user && !userHasReviewed && !showReviewForm && (
+                <button 
+                  className="write-review-btn"
+                  onClick={() => setShowReviewForm(true)}
+                >
+                  Write a Review
+                </button>
+              )}
             </div>
-          )}
 
-          <div className="reviews-list">
-            {reviews.map(review => (
-              <ReviewCard
-                key={review._id}
-                review={review}
-                onUpdate={handleEditReview}
-                onDelete={handleDeleteReview}
-              />
-            ))}
+            {showReviewForm && (
+              <div className="review-form-section">
+                <ReviewForm
+                  gameId={id!}
+                  existingReview={editingReview}
+                  onSubmit={handleSubmitReview}
+                  onCancel={() => {
+                    setShowReviewForm(false);
+                    setEditingReview(null);
+                  }}
+                  loading={submittingReview}
+                />
+              </div>
+            )}
+
+            <div className="reviews-list">
+              {reviews.length === 0 ? (
+                <p className="no-reviews">No reviews yet. Be the first to review this game!</p>
+              ) : (
+                reviews.map(review => (
+                  <ReviewCard
+                    key={review._id}
+                    review={review}
+                    onUpdate={handleEditReview}
+                    onDelete={handleDeleteReview}
+                  />
+                ))
+              )}
+            </div>
+
+            {reviews.length > 0 && (
+              <div className="reviews-footer">
+                <button 
+                  onClick={loadMoreReviews}
+                  disabled={reviewsLoading}
+                >
+                  {reviewsLoading ? 'Loading...' : 'Load More Reviews'}
+                </button>
+              </div>
+            )}
           </div>
-
-          {reviews.length > 0 && (
-            <div className="reviews-footer">
-              <button 
-                onClick={loadMoreReviews}
-                disabled={reviewsLoading}
-              >
-                {reviewsLoading ? 'Loading...' : 'Load More Reviews'}
-              </button>
-            </div>
-          )}
-        </div>
-      </section>
+        </section>
+      </div>
     </div>
   );
 };

@@ -18,6 +18,7 @@ interface NavLinkData {
 
 const NexusNavbar: React.FC = () => {
   const [open, setOpen] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [activeLink, setActiveLink] = useState<string>('');
   const toggleRef = useRef<HTMLButtonElement | null>(null);
   const navRef = useRef<HTMLElement | null>(null);
@@ -28,6 +29,18 @@ const NexusNavbar: React.FC = () => {
   useEffect(() => {
     setActiveLink(window.location.pathname);
   }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (!userMenuOpen) return;
+      const userMenu = document.querySelector('.nexus-user-menu');
+      if (userMenu && !userMenu.contains(e.target as Node)) {
+        setUserMenuOpen(false);
+      }
+    };
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, [userMenuOpen]);
 
   useEffect(() => {
     let mounted = true;
@@ -209,7 +222,13 @@ const NexusNavbar: React.FC = () => {
               <div className="nexus-user-menu">
                 <button 
                   className="user-avatar-btn"
+                  onClick={() => {
+                    playClick();
+                    setUserMenuOpen(!userMenuOpen);
+                  }}
                   onMouseEnter={() => playHover()}
+                  aria-haspopup="true"
+                  aria-expanded={userMenuOpen}
                 >
                   {user.profile?.avatar ? (
                     <img src={user.profile.avatar} alt={user.username} className="user-avatar" />
@@ -222,11 +241,14 @@ const NexusNavbar: React.FC = () => {
                   <div className="avatar-glow" />
                 </button>
                 
-                <div className="user-dropdown">
+                <div className={`user-dropdown ${userMenuOpen ? 'open' : ''}`}>
                   <Link 
                     to="/profile" 
                     className="dropdown-item"
-                    onClick={() => handleLinkClick('/profile')}
+                    onClick={() => {
+                      handleLinkClick('/profile');
+                      setUserMenuOpen(false);
+                    }}
                     onMouseEnter={() => playHover()}
                   >
                     <span className="dropdown-icon">📊</span>
@@ -235,7 +257,10 @@ const NexusNavbar: React.FC = () => {
                   <Link 
                     to="/reviews" 
                     className="dropdown-item"
-                    onClick={() => handleLinkClick('/reviews')}
+                    onClick={() => {
+                      handleLinkClick('/reviews');
+                      setUserMenuOpen(false);
+                    }}
                     onMouseEnter={() => playHover()}
                   >
                     <span className="dropdown-icon">⭐</span>
@@ -243,7 +268,10 @@ const NexusNavbar: React.FC = () => {
                   </Link>
                   <button 
                     className="dropdown-item" 
-                    onClick={handleLogout}
+                    onClick={() => {
+                      handleLogout();
+                      setUserMenuOpen(false);
+                    }}
                     onMouseEnter={() => playHover()}
                   >
                     <span className="dropdown-icon">🚪</span>

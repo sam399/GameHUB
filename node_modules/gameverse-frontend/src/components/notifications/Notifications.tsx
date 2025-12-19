@@ -33,7 +33,7 @@ const Notifications: React.FC = () => {
 
   const markAllRead = async () => {
     try {
-      await notificationService.markAllRead();
+      await notificationService.markAllAsRead();
       const ts = new Date().toISOString();
       localStorage.setItem('notifications_last_read', ts);
       setLastReadAt(ts);

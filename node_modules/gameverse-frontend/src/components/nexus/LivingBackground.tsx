@@ -6,9 +6,10 @@ import { useTheme } from '../../contexts/ThemeContext';
 interface HexGridProps {
   mousePosition: { x: number; y: number };
   scrollProgress: number;
+  theme: 'light' | 'dark';
 }
 
-const HexagonalGrid: React.FC<HexGridProps> = ({ mousePosition, scrollProgress }) => {
+const HexagonalGrid: React.FC<HexGridProps> = ({ mousePosition, scrollProgress, theme }) => {
   const meshRef = useRef<THREE.InstancedMesh>(null);
   const { viewport } = useThree();
   
@@ -99,9 +100,9 @@ const HexagonalGrid: React.FC<HexGridProps> = ({ mousePosition, scrollProgress }
   return (
     <instancedMesh ref={meshRef} args={[hexagonGeometry, undefined, hexagons.length]}>
       <meshBasicMaterial 
-        color="#00f7ff"
+        color={theme === 'dark' ? '#00f7ff' : '#00a4c1'}
         transparent
-        opacity={0.15}
+        opacity={theme === 'dark' ? 0.15 : 0.2}
         side={THREE.DoubleSide}
         wireframe
       />
@@ -109,7 +110,7 @@ const HexagonalGrid: React.FC<HexGridProps> = ({ mousePosition, scrollProgress }
   );
 };
 
-const ParticleField: React.FC = () => {
+const ParticleField: React.FC<{ theme: 'light' | 'dark' }> = ({ theme }) => {
   const particlesRef = useRef<THREE.Points>(null);
   
   const particles = useMemo(() => {
@@ -154,9 +155,9 @@ const ParticleField: React.FC = () => {
       </bufferGeometry>
       <pointsMaterial
         size={0.05}
-        color="#00f7ff"
+        color={theme === 'dark' ? '#00f7ff' : '#0090aa'}
         transparent
-        opacity={0.6}
+        opacity={theme === 'dark' ? 0.6 : 0.45}
         sizeAttenuation
       />
     </points>
@@ -205,15 +206,15 @@ export const LivingBackground: React.FC = () => {
           pointerEvents: 'none'
         }}
       >
-        <color attach="background" args={[theme === 'dark' ? '#050508' : '#ffffff']} />
-        <fog attach="fog" args={[theme === 'dark' ? '#050508' : '#ffffff', 10, 30]} />
+        <color attach="background" args={[theme === 'dark' ? '#050508' : '#eef3f9']} />
+        <fog attach="fog" args={[theme === 'dark' ? '#050508' : '#eef3f9', 10, 30]} />
         
         <ambientLight intensity={0.2} />
         <pointLight position={[10, 10, 10]} intensity={0.5} color="#00f7ff" />
         <pointLight position={[-10, -10, 5]} intensity={0.3} color="#ff00e5" />
         
-        <HexagonalGrid mousePosition={mousePosition} scrollProgress={scrollProgress} />
-        <ParticleField />
+        <HexagonalGrid mousePosition={mousePosition} scrollProgress={scrollProgress} theme={theme} />
+        <ParticleField theme={theme} />
       </Canvas>
     </div>
   );

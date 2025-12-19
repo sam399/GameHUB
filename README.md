@@ -6,8 +6,8 @@
 
 - ✅ **Backend**: Running on port 5000 with MongoDB Atlas
 - ✅ **Frontend**: Running on port 5173 with Vite hot-reload
-- ✅ **Database**: MongoDB Atlas connected with 179+ documents
-- ✅ **Game API**: FreeToGame API integrated (418+ free-to-play games)
+- ✅ **Database**: MongoDB Atlas with 50 popular games in library
+- ✅ **Game Library**: Curated collection of AAA and popular indie titles
 - ✅ **2FA**: Two-Factor Authentication fully functional
 - ✅ **Socket.IO**: Real-time features operational
 - ✅ **Nexus Interface**: Immersive cyber-fantasy UI complete
@@ -38,7 +38,7 @@ Experience a revolutionary cyber-fantasy design system that transforms web brows
 ### 🎯 Gaming & Content
 
 - **Game Library** — Track your gaming collection with play status, hours played, completion percentage, and play sessions
-- **External Game API** — Integrated with FreeToGame API providing 418+ free-to-play games
+- **Curated Game Database** — 50 hand-picked popular games including AAA titles and beloved indies with complete information
 - **Reviews & Ratings** — Write detailed game reviews, rate games, and react to community reviews (helpful, funny, awards)
 - **Wishlist System** — Create and manage your game wishlist with public/private visibility toggle
 - **Game Discovery** — Browse games by genre, search, and view featured titles
@@ -113,7 +113,7 @@ Experience a revolutionary cyber-fantasy design system that transforms web brows
 - **Two-Factor Authentication** — TOTP-based 2FA with QR code generation using speakeasy library
 - **AI Recommendation Engine** — Genre-based preference learning from user reviews with compatibility scoring
 - **Activity Hooks** — Automatic activity creation across all controllers with real-time broadcasts
-- **Redis Caching** — RAWG API news caching with 1-hour TTL and automatic fallback
+- **MongoDB Game Library** — Curated database of 50 popular games with ratings, genres, platforms, and pricing
 - **JWT Authentication** — Secure token-based authentication with refresh capability
 - **Socket.IO Rooms** — User-specific and admin rooms for targeted real-time events
 - **Mongoose ODM** — MongoDB integration with schema validation and relationships
@@ -147,7 +147,6 @@ Experience a revolutionary cyber-fantasy design system that transforms web brows
 - **Speakeasy** for TOTP-based 2FA
 - **QRCode** for 2FA QR code generation
 - **Redis** for caching (optional with fallback)
-- **FreeToGame API** integration for free-to-play game data (418+ games)
 - **Bcrypt** for password hashing
 - **dotenv** for environment configuration
 
@@ -182,10 +181,6 @@ JWT_EXPIRE=7d
 # Frontend URL (for CORS and Socket.IO)
 FRONTEND_URL=http://localhost:5173
 
-# Game API Configuration
-USE_FREETOGAME=true
-FREETOGAME_API_URL=https://www.freetogame.com/api
-
 # Optional: Redis (for caching - will use in-memory fallback if not set)
 REDIS_URL=redis://localhost:6379
 
@@ -216,7 +211,21 @@ npm run dev
 
 The backend will start on `http://localhost:5000` (or the PORT you specified).
 
-**2. Start the frontend (Vite)**
+**2. Populate the game database with 50 popular games**
+
+```powershell
+cd "H:\My Website\GameHUB\gameverse\backend"
+node scripts/populatePopularGames.js
+```
+
+This will add a curated collection of 50 popular games including:
+- The Witcher 3, Red Dead Redemption 2, Elden Ring
+- GTA V, Cyberpunk 2077, Baldur's Gate 3
+- Free-to-play titles like Valorant, League of Legends, Fortnite
+- Indie gems like Stardew Valley, Hades, Hollow Knight
+- And many more AAA and beloved titles!
+
+**3. Start the frontend (Vite)**
 
 ```powershell
 cd "H:\My Website\GameHUB\gameverse\frontend"
@@ -226,7 +235,7 @@ npm run dev
 
 The frontend will start on `http://localhost:5173` or another available port shown by Vite.
 
-**3. Create an admin user (optional)**
+**4. Create an admin user (optional)**
 
 Use the convenience script to create or promote an admin user:
 
@@ -260,6 +269,12 @@ The script will promote an existing user with that email to `admin` or create a 
 - `GET /api/games/featured` — Get featured games
 - `GET /api/games/genre/:genre` — Get games by genre
 - `GET /api/games/:id` — Get game details by ID
+- `GET /api/games/meta/genres` — Get all unique genres
+- `GET /api/games/meta/platforms` — Get all unique platforms
+- `GET /api/games/meta/stats` — Get game library statistics
+- `POST /api/games` — Create a new game (admin only)
+- `PUT /api/games/:id` — Update a game (admin only)
+- `DELETE /api/games/:id` — Delete a game (admin only)
 
 ### Review Endpoints
 - `GET /api/reviews/games/:gameId/reviews` — Get all reviews for a game
@@ -496,10 +511,10 @@ npx tsc --noEmit
 - For testing, use a TOTP generator or Google Authenticator app
 
 **Game library empty**
-- Verify FreeToGame API is accessible: `https://www.freetogame.com/api/games`
-- Check `USE_FREETOGAME=true` in backend `.env`
-- Review backend logs for API errors
-- API should return 418+ free-to-play games
+- Run the population script: `node scripts/populatePopularGames.js`
+- Check MongoDB connection is working
+- Verify 50 games were inserted successfully
+- Review backend logs for database errors
 
 ## 🔐 Two-Factor Authentication Setup
 
@@ -729,6 +744,7 @@ Ready to deploy? We've prepared everything for you!
 
 ## 📚 Additional Documentation
 
+- **[Game Library Guide](GAME_LIBRARY_GUIDE.md)** — Complete guide to the curated game database
 - **[Nexus Implementation Summary](NEXUS_IMPLEMENTATION_SUMMARY.md)** — Complete Nexus Interface implementation details
 - **[Nexus Quick Start](gameverse/NEXUS_QUICK_START.md)** — Get started with the Nexus Interface
 - **[Nexus Visual Guide](gameverse/NEXUS_VISUAL_GUIDE.md)** — Visual overview of Nexus components
@@ -741,7 +757,7 @@ Ready to deploy? We've prepared everything for you!
 
 ### For Users
 - **Application URL**: http://localhost:5173
-- **Features**: The Nexus Interface with immersive cyber-fantasy UI, game library with 418+ games, 2FA security, real-time chat, forums, achievements
+- **Features**: The Nexus Interface with immersive cyber-fantasy UI, curated game library with 50 popular titles, 2FA security, real-time chat, forums, achievements
 - **Test Account**: Create your own via registration page
 
 ### For Developers

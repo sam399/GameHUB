@@ -24,15 +24,28 @@ const GameLibrary: React.FC = () => {
   const loadGames = async () => {
     setLoading(true);
     try {
+      console.log('Loading games with filters:', filters);
       const response = await gameService.getGames(filters);
-      setGames(response.data.games);
-      setPagination({
-        totalPages: response.data.totalPages,
-        currentPage: response.data.currentPage,
-        total: response.data.total
-      });
+      console.log('Games API response:', response);
+
+      // API shape: { success, data: { games, totalPages, currentPage, total } }
+      const data = response?.data ?? response;
+
+      if (data?.games) {
+        setGames(data.games);
+        setPagination({
+          totalPages: data.totalPages,
+          currentPage: data.currentPage,
+          total: data.total
+        });
+        console.log('Successfully loaded games:', data.games.length);
+      } else {
+        console.error('Invalid response format:', response);
+        setGames([]);
+      }
     } catch (error) {
       console.error('Error loading games:', error);
+      setGames([]);
     } finally {
       setLoading(false);
     }
@@ -57,7 +70,7 @@ const GameLibrary: React.FC = () => {
 
           <main className="games-main">
             <GameGrid games={games} loading={loading} />
-            
+
             {!loading && pagination.totalPages > 1 && (
               <div className="pagination">
                 <button
@@ -66,11 +79,17 @@ const GameLibrary: React.FC = () => {
                 >
                   Previous
                 </button>
-                
-                <span>
-                  Page {pagination.currentPage} of {pagination.totalPages}
-                </span>
-                
+
+                {Array.from({ length: pagination.totalPages }, (_, idx) => idx + 1).map(page => (
+                  <button
+                    key={page}
+                    className={page === pagination.currentPage ? 'active' : ''}
+                    onClick={() => handlePageChange(page)}
+                  >
+                    {page}
+                  </button>
+                ))}
+
                 <button
                   disabled={pagination.currentPage === pagination.totalPages}
                   onClick={() => handlePageChange(pagination.currentPage + 1)}

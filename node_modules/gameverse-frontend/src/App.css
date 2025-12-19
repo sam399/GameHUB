@@ -1,7 +1,7 @@
 .App {
   text-align: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--nexus-void-black) 0%, var(--nexus-midnight-blue) 100%);
 }
 
 .App-header {

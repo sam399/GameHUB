@@ -15,7 +15,7 @@ exports.getRecommendations = async (req, res) => {
 
     if (userReviews.length === 0) {
       // Cold Start Problem: If user has no reviews, return popular games instead
-      const popularGames = await Game.find().sort({ averageRating: -1 }).limit(5);
+      const popularGames = await Game.find({ active: true }).sort({ 'rating.average': -1 }).limit(5);
       return res.status(200).json({ 
         success: true, 
         data: popularGames, 
@@ -30,10 +30,11 @@ exports.getRecommendations = async (req, res) => {
 
     userReviews.forEach(review => {
       const game = review.game;
+      if (!game) return; // Skip if game not found
       playedGameIds.push(game._id.toString());
       
-      // Assuming game.genre is a String or Array. Adapting for simple string genre here:
-      const genres = game.genre.split(',').map(g => g.trim()); 
+      // Handle genre as array (from our database schema)
+      const genres = Array.isArray(game.genre) ? game.genre : [game.genre];
       
       genres.forEach(genre => {
         if (!genrePreferences[genre]) genrePreferences[genre] = 0;
@@ -43,13 +44,14 @@ exports.getRecommendations = async (req, res) => {
 
     // 3. Fetch Candidate Games (Games user hasn't played yet)
     const candidateGames = await Game.find({ 
-      _id: { $nin: playedGameIds } 
+      _id: { $nin: playedGameIds },
+      active: true
     }).lean();
 
     // 4. Calculate Compatibility Score
     const scoredGames = candidateGames.map(game => {
       let score = 0;
-      const gameGenres = game.genre.split(',').map(g => g.trim());
+      const gameGenres = Array.isArray(game.genre) ? game.genre : [game.genre];
 
       gameGenres.forEach(g => {
         if (genrePreferences[g]) {
