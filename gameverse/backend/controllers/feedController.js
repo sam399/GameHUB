@@ -1,6 +1,5 @@
 const Activity = require('../models/Activity');
 const User = require('../models/User');
-const axios = require('axios');
 const redisCache = require('../utils/redisCache');
 
 const NEWS_CACHE_KEY = 'feed:rawg_news';
@@ -48,53 +47,21 @@ const getMockNews = () => [
 const getExternalNews = async () => {
   return redisCache.getOrCompute(NEWS_CACHE_KEY, NEWS_CACHE_TTL, async () => {
     try {
-      const apiKey = process.env.RAWG_API_KEY;
-      const useRapidAPI = process.env.USE_RAPIDAPI === 'true';
-      const rapidAPIHost = process.env.RAPIDAPI_HOST;
+      // Use database games instead of external API
+      const Game = require('../models/Game');
+      const games = await Game.find({ active: true, featured: true })
+        .sort({ 'rating.average': -1 })
+        .limit(5);
 
-      if (!apiKey || apiKey === 'your_rawg_api_key_here' || apiKey === 'your_rapidapi_key_here') {
-        console.warn('RAWG_API_KEY not set; using mock news data');
-        return getMockNews();
-      }
-
-      let response;
-      
-      if (useRapidAPI && rapidAPIHost) {
-        // Use RapidAPI endpoint
-        response = await axios.get(`https://${rapidAPIHost}/games`, {
-          headers: {
-            'x-rapidapi-key': apiKey,
-            'x-rapidapi-host': rapidAPIHost
-          },
-          params: {
-            dates: '2024-01-01,2025-12-31',
-            ordering: '-added',
-            page_size: 5
-          },
-          timeout: 5000
-        });
-      } else {
-        // Use direct RAWG API
-        response = await axios.get('https://api.rawg.io/api/games', {
-          params: {
-            key: apiKey,
-            dates: '2024-01-01,2025-12-31',
-            ordering: '-added',
-            page_size: 5
-          },
-          timeout: 5000
-        });
-      }
-
-      return (response.data.results || []).map((game) => ({
+      return games.map((game) => ({
         type: 'EXTERNAL_NEWS',
-        title: `Trending: ${game.name}`,
-        image: game.background_image,
-        link: `/game/${game.id}`,
-        createdAt: game.released
+        title: `Trending: ${game.title}`,
+        image: game.images?.cover,
+        link: `/games/${game._id}`,
+        createdAt: game.updatedAt
       }));
     } catch (err) {
-      console.error('External news API error:', err.message);
+      console.error('News generation error:', err.message);
       return getMockNews();
     }
   });

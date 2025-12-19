@@ -4,14 +4,18 @@
 
 ## 🚀 Current Status
 
-- ✅ **Backend**: Running on port 5000 with MongoDB Atlas
+- ✅ **Backend**: Running on port 5000 with MongoDB Atlas (database-first architecture)
 - ✅ **Frontend**: Running on port 5173 with Vite hot-reload
-- ✅ **Database**: MongoDB Atlas with 50 popular games in library
-- ✅ **Game Library**: Curated collection of AAA and popular indie titles
+- ✅ **Database**: MongoDB Atlas with 49 games (fully populated and indexed)
+- ✅ **Game Library**: Fully functional pagination and filtering system
+- ✅ **Light/Dark Mode**: Complete theme system with CSS variables across all pages
+- ✅ **Animations**: WebGL hex grid and particles visible in both light and dark modes
 - ✅ **2FA**: Two-Factor Authentication fully functional
 - ✅ **Socket.IO**: Real-time features operational
-- ✅ **Nexus Interface**: Immersive cyber-fantasy UI complete
-- ✅ **All Features**: Tested and working properly
+- ✅ **Nexus Interface**: Immersive cyber-fantasy UI with theme-aware components
+- ✅ **Profile Dropdown**: Click-based menu now working properly
+- ✅ **All Core Features**: Tested and working properly
+- ✅ **Codebase Cleanup**: Removed 27 legacy files and external API dependencies
 
 ## 🎨 The Nexus Interface
 
@@ -37,8 +41,8 @@ Experience a revolutionary cyber-fantasy design system that transforms web brows
 
 ### 🎯 Gaming & Content
 
-- **Game Library** — Track your gaming collection with play status, hours played, completion percentage, and play sessions
-- **Curated Game Database** — 50 hand-picked popular games including AAA titles and beloved indies with complete information
+- **Game Library** — Browse all 49 games with full pagination (5 pages, 12 games per page), filtering by genre/platform, and search functionality
+- **Curated Game Database** — Complete metadata including ratings, genres, platforms, pricing, and cover artwork
 - **Reviews & Ratings** — Write detailed game reviews, rate games, and react to community reviews (helpful, funny, awards)
 - **Wishlist System** — Create and manage your game wishlist with public/private visibility toggle
 - **Game Discovery** — Browse games by genre, search, and view featured titles
@@ -113,7 +117,7 @@ Experience a revolutionary cyber-fantasy design system that transforms web brows
 - **Two-Factor Authentication** — TOTP-based 2FA with QR code generation using speakeasy library
 - **AI Recommendation Engine** — Genre-based preference learning from user reviews with compatibility scoring
 - **Activity Hooks** — Automatic activity creation across all controllers with real-time broadcasts
-- **MongoDB Game Library** — Curated database of 50 popular games with ratings, genres, platforms, and pricing
+- **MongoDB Game Library** — Database-first architecture with 49 games including all metadata (genres, platforms, pricing, ratings)
 - **JWT Authentication** — Secure token-based authentication with refresh capability
 - **Socket.IO Rooms** — User-specific and admin rooms for targeted real-time events
 - **Mongoose ODM** — MongoDB integration with schema validation and relationships
@@ -211,19 +215,16 @@ npm run dev
 
 The backend will start on `http://localhost:5000` (or the PORT you specified).
 
-**2. Populate the game database with 50 popular games**
+**2. Database is pre-populated with 49 games**
+
+The game database is already populated with a curated collection of 49 games. You can verify this by checking MongoDB Atlas or by accessing `/api/games` in the browser once the backend is running.
+
+To add more games (optional):
 
 ```powershell
 cd "H:\My Website\GameHUB\gameverse\backend"
 node scripts/populatePopularGames.js
 ```
-
-This will add a curated collection of 50 popular games including:
-- The Witcher 3, Red Dead Redemption 2, Elden Ring
-- GTA V, Cyberpunk 2077, Baldur's Gate 3
-- Free-to-play titles like Valorant, League of Legends, Fortnite
-- Indie gems like Stardew Valley, Hades, Hollow Knight
-- And many more AAA and beloved titles!
 
 **3. Start the frontend (Vite)**
 
@@ -251,8 +252,17 @@ The script will promote an existing user with that email to `admin` or create a 
 - **Both servers together**: Use Windows Terminal with split panes or a process manager like `concurrently`
 - **TypeScript checks**: Run `npx tsc --noEmit` in the frontend directory
 - **Hot reloading**: Both frontend (Vite) and backend (nodemon) support hot reloading
-- **Socket testing**: Use `frontend/scripts/socketSmokeTest.js` to simulate Socket.IO clients
 - **Port conflicts**: If port 5000 or 5173 is in use, either free it or set a different `PORT` in the backend `.env`
+
+### Codebase Cleanup & Refactoring
+
+This project was recently refactored to remove legacy code and external API dependencies:
+
+- **Removed 27 files**: Old controllers, seed scripts, deployment documentation, and test utilities
+- **Simplified feedController**: Removed RapidAPI/RAWG/FreeToGame external API calls (~50 lines of code)
+- **Database-first architecture**: All data now sourced from MongoDB Atlas, no external API dependencies
+- **Clean package.json**: Removed unused npm scripts and simplified dependencies
+- **See [REFACTOR_SUMMARY.md](./REFACTOR_SUMMARY.md) for complete details of all changes**
 
 ## 📡 API Documentation
 
@@ -732,39 +742,36 @@ Ready to deploy? We've prepared everything for you!
 1. **Start with:** [QUICK_START_DEPLOYMENT.md](./QUICK_START_DEPLOYMENT.md) (5-minute guide)
 2. **Detailed steps:** [DEPLOYMENT_COMMANDS.md](./DEPLOYMENT_COMMANDS.md) (copy-paste ready)
 3. **Complete guide:** [VERCEL_DEPLOYMENT.md](./VERCEL_DEPLOYMENT.md) (comprehensive)
-4. **Checklist:** [DEPLOYMENT_CHECKLIST.md](./DEPLOYMENT_CHECKLIST.md) (verification)
 
 **What's included:**
 - ✅ Pre-configured `vercel.json`
 - ✅ Backend serverless setup
 - ✅ Frontend build optimization
 - ✅ Environment variable templates
+- ✅ MongoDB Atlas connection
 - ✅ Troubleshooting guides
-- ✅ Post-deployment checklists
 
 ## 📚 Additional Documentation
 
-- **[Game Library Guide](GAME_LIBRARY_GUIDE.md)** — Complete guide to the curated game database
 - **[Nexus Implementation Summary](NEXUS_IMPLEMENTATION_SUMMARY.md)** — Complete Nexus Interface implementation details
 - **[Nexus Quick Start](gameverse/NEXUS_QUICK_START.md)** — Get started with the Nexus Interface
 - **[Nexus Visual Guide](gameverse/NEXUS_VISUAL_GUIDE.md)** — Visual overview of Nexus components
+- **[Refactoring Summary](REFACTOR_SUMMARY.md)** — Details of codebase cleanup and removed files
 - **[2FA Test Report](2FA_TEST_REPORT.md)** — Complete 2FA testing and setup guide
 - **[Feature Verification](FEATURE_VERIFICATION_REPORT.md)** — All features tested and validated
-- **[Deployment Guide](QUICK_START_DEPLOYMENT.md)** — Production deployment instructions
-- **[Feature Enhancements](FEATURE_ENHANCEMENTS_COMPLETE.md)** — Recent improvements log
 
 ## 🎮 Quick Access
 
 ### For Users
 - **Application URL**: http://localhost:5173
-- **Features**: The Nexus Interface with immersive cyber-fantasy UI, curated game library with 50 popular titles, 2FA security, real-time chat, forums, achievements
+- **Features**: The Nexus Interface with immersive cyber-fantasy UI, 49-game curated library with pagination, 2FA security, real-time chat, forums, achievements, leaderboards
 - **Test Account**: Create your own via registration page
 
 ### For Developers
 - **Backend API**: http://localhost:5000
 - **API Docs**: See API Documentation section above
-- **Test Script**: `node test/test-2fa.js` for 2FA testing
-- **Database**: MongoDB Atlas with 179+ documents
+- **Database**: MongoDB Atlas with 49 games and complete schema
+- **Theme System**: Light/dark mode with CSS variables across all components
 
 ### For Admins
 - **Admin Panel**: Login as admin and access Command Center
