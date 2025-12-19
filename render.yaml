@@ -1,0 +1,32 @@
+# Render Deployment Configuration
+# Reference: https://render.com/docs/deploy-node
+
+services:
+  - type: web
+    name: gameverse-backend
+    env: node
+    region: oregon
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    
+    # Environment variables (set these in Render dashboard)
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        sync: false  # Set securely in Render dashboard
+      - key: JWT_SECRET
+        sync: false
+      - key: JWT_EXPIRE
+        value: 30d
+      - key: FRONTEND_URL
+        sync: false  # Will be your Netlify site URL
+      - key: PORT
+        value: 10000
+
+    # Build settings
+    buildFilter:
+      paths:
+        - gameverse/backend/**
