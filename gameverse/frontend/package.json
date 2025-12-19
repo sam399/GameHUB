@@ -7,7 +7,7 @@
     "start": "vite",
     "test:e2e": "playwright test",
     "test:e2e:headed": "playwright test --headed",
-    "build": "node -e \"(async () => { await require('vite').build() })()\"",
+    "build": "vite build",
     "preview": "vite preview"
   },
   "dependencies": {

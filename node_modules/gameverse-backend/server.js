@@ -11,8 +11,10 @@ const server = http.createServer(app);
 // Socket.io setup with CORS
 const io = socketio(server, {
   cors: {
-    origin: process.env.FRONTEND_URL || 'http://localhost:5173',
-    methods: ['GET', 'POST']
+    origin: process.env.FRONTEND_URL || process.env.VITE_SOCKET_URL || 'http://localhost:5173',
+    methods: ['GET', 'POST'],
+    credentials: true,
+    transports: ['websocket', 'polling']
   }
 });
 
