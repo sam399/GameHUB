@@ -35,7 +35,7 @@ const ActivityCard: React.FC<ActivityProps> = ({ activity }) => {
           {' '}
           {getMessage()}
           {' '}
-          <Link to={`/game/${activity.data.gameId}`} className="font-bold text-white hover:underline">
+          <Link to={`/games/${activity.data.gameId}`} className="font-bold text-white hover:underline">
             {activity.data.gameName}
           </Link>
         </p>

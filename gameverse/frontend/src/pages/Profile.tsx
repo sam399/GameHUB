@@ -208,6 +208,16 @@ const Profile: React.FC = () => {
           {/* Extracted wishlist privacy toggle into a small component */}
           {/* @ts-ignore - dynamic import / no default export typing issues avoided by direct import */}
           <WishlistPrivacyToggle userId={user._id} />
+          <Link to="/my-wishlist" className="view-all-btn" style={{ marginTop: '1rem', display: 'inline-block' }}>
+            View Full Wishlist
+          </Link>
+        </div>
+
+        <div className="profile-section">
+          <h3>My Game Library</h3>
+          <Link to="/my-library" className="view-all-btn">
+            View My Collection
+          </Link>
         </div>
 
         <div className="profile-section">

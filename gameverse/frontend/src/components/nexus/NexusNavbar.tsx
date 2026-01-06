@@ -121,8 +121,10 @@ const NexusNavbar: React.FC = () => {
     { to: '/games', label: 'Library', icon: '🎮' },
     { to: '/feed', label: 'Feed', icon: '📰' },
     ...(user ? [
+      { to: '/my-library', label: 'My Games', icon: '📚' },
+      { to: '/my-wishlist', label: 'Wishlist', icon: '⭐' },
       { to: '/forum', label: 'Forum', icon: '💬' },
-      { to: '/reviews', label: 'My Reviews', icon: '⭐', badge: myReviewsCount || undefined }
+      { to: '/reviews', label: 'My Reviews', icon: '✍️', badge: myReviewsCount || undefined }
     ] : [])
   ];
 

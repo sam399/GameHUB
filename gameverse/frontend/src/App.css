@@ -249,6 +249,25 @@ button:disabled {
   border-bottom: none;
 }
 
+.view-all-btn {
+  display: inline-block;
+  padding: 0.6rem 1.2rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.3s;
+  border: none;
+  cursor: pointer;
+}
+
+.view-all-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
 /* Navigation */
 nav button {
   width: auto;
@@ -2470,7 +2489,16 @@ nav button:hover {
 }
 
 .bell-button:hover {
-  background: #f8f9fa;
+  background: rgba(102, 126, 234, 0.1);
+}
+
+.bell-button:active {
+  background: rgba(102, 126, 234, 0.2);
+}
+
+.bell-button:focus {
+  outline: none;
+  background: none;
 }
 
 .notification-badge {

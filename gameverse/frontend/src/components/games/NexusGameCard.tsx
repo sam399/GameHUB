@@ -210,7 +210,7 @@ export const NexusGameCard: React.FC<NexusGameCardProps> = ({ game }) => {
           <p className="card-developer">{game.developer}</p>
           
           <div className="card-genres">
-            {game.genre.slice(0, 2).map((genre, index) => (
+            {Array.isArray(game.genre) && game.genre.slice(0, 2).map((genre, index) => (
               <span key={index} className="genre-tag-nexus">
                 <span className="tag-border" />
                 <span className="tag-text">{genre}</span>
@@ -220,7 +220,7 @@ export const NexusGameCard: React.FC<NexusGameCardProps> = ({ game }) => {
           </div>
           
           <div className="card-platforms">
-            {game.platforms.slice(0, 3).map((platform, index) => (
+            {Array.isArray(game.platforms) && game.platforms.slice(0, 3).map((platform, index) => (
               <span key={index} className="platform-icon-nexus" title={platform}>
                 {platform.slice(0, 3).toUpperCase()}
               </span>

@@ -143,7 +143,7 @@ const CinematicHome: React.FC = () => {
               trendingGames.map((game) => (
                 <Link
                   key={game._id}
-                  to={`/game/${game._id}`}
+                  to={`/games/${game._id}`}
                   className="group relative min-w-[280px] h-[400px] rounded-2xl overflow-hidden transform transition-all duration-500 hover:scale-110 hover:-rotate-2"
                   style={{
                     perspective: '1000px',

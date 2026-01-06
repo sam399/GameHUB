@@ -30,6 +30,8 @@ import NexusHome from './pages/Home/NexusHome';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { DroneCursor } from './components/nexus/DroneCursor';
 import { LivingBackground } from './components/nexus/LivingBackground';
+import MyLibrary from './pages/MyLibrary';
+import MyWishlist from './pages/MyWishlist';
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user, loading } = useAuth();
@@ -122,6 +124,16 @@ function AppContent() {
           <Route path="/notifications" element={
             <ProtectedRoute>
               <Notifications />
+            </ProtectedRoute>
+          } />
+          <Route path="/my-library" element={
+            <ProtectedRoute>
+              <MyLibrary />
+            </ProtectedRoute>
+          } />
+          <Route path="/my-wishlist" element={
+            <ProtectedRoute>
+              <MyWishlist />
             </ProtectedRoute>
           } />
           {/* Admin routes */}

@@ -45,7 +45,7 @@ const RecommendedGames = () => {
 
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4 relative z-10">
         {games.map((game: any) => (
-          <Link to={`/game/${game._id}`} key={game._id} className="group">
+          <Link to={`/games/${game._id}`} key={game._id} className="group">
             <div className="relative aspect-[3/4] overflow-hidden rounded-lg shadow-lg">
               <img 
                 src={game.coverImage} 

@@ -49,25 +49,25 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({ chil
   useEffect(() => {
     if (socket && user) {
       const handleNewNotification = (data: { notification: Notification }) => {
-        setNotifications(prev => [data.notification, ...prev]);
+        setNotifications(prev => [data.notification, ...(Array.isArray(prev) ? prev : [])]);
         setUnreadCount(prev => prev + 1);
         loadStats(); // Refresh stats
       };
 
       const handleNotificationRead = (data: { notificationId: string }) => {
         setNotifications(prev =>
-          prev.map(notification =>
+          Array.isArray(prev) ? prev.map(notification =>
             notification._id === data.notificationId
               ? { ...notification, isRead: true }
               : notification
-          )
+          ) : []
         );
         setUnreadCount(prev => Math.max(0, prev - 1));
       };
 
       const handleAllNotificationsRead = () => {
         setNotifications(prev =>
-          prev.map(notification => ({ ...notification, isRead: true }))
+          Array.isArray(prev) ? prev.map(notification => ({ ...notification, isRead: true })) : []
         );
         setUnreadCount(0);
       };
@@ -88,10 +88,12 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({ chil
     setLoading(true);
     try {
       const response = await notificationService.getNotifications();
-      setNotifications(response.data.notifications);
-      setUnreadCount(response.data.unreadCount);
+      setNotifications(response?.data?.notifications || []);
+      setUnreadCount(response?.data?.unreadCount || 0);
     } catch (error) {
       console.error('Error loading notifications:', error);
+      setNotifications([]);
+      setUnreadCount(0);
     } finally {
       setLoading(false);
     }
@@ -129,7 +131,7 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({ chil
   const deleteNotification = async (notificationId: string) => {
     try {
       await notificationService.deleteNotification(notificationId);
-      setNotifications(prev => prev.filter(notification => notification._id !== notificationId));
+      setNotifications(prev => (Array.isArray(prev) ? prev.filter(notification => notification._id !== notificationId) : []));
       loadStats(); // Refresh stats
     } catch (error) {
       console.error('Error deleting notification:', error);

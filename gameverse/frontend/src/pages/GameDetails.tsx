@@ -178,14 +178,14 @@ const GameDetails: React.FC = () => {
               </div>
 
               <div className="game-genres">
-                {game.genre.map(genre => (
+                {Array.isArray(game.genre) && game.genre.map(genre => (
                   <span key={genre} className="genre-badge">{genre}</span>
                 ))}
               </div>
 
               <div className="game-platforms">
                 <h4>Platforms:</h4>
-                {game.platforms.map(platform => (
+                {Array.isArray(game.platforms) && game.platforms.map(platform => (
                   <span key={platform} className="platform-badge">{platform}</span>
                 ))}
               </div>
@@ -216,7 +216,7 @@ const GameDetails: React.FC = () => {
             <h2>About This Game</h2>
             <p className="game-description">{game.description}</p>
 
-            {game.images.screenshots && game.images.screenshots.length > 0 && (
+            {Array.isArray(game.images?.screenshots) && game.images.screenshots.length > 0 && (
               <div className="screenshots-section">
                 <h3>Screenshots</h3>
                 <div className="screenshots-grid">
@@ -247,11 +247,11 @@ const GameDetails: React.FC = () => {
               </div>
               <div className="info-item">
                 <label>Platforms</label>
-                <p>{game.platforms.join(', ')}</p>
+                <p>{Array.isArray(game.platforms) ? game.platforms.join(', ') : 'N/A'}</p>
               </div>
               <div className="info-item">
                 <label>Genres</label>
-                <p>{game.genre.join(', ')}</p>
+                <p>{Array.isArray(game.genre) ? game.genre.join(', ') : 'N/A'}</p>
               </div>
               <div className="info-item">
                 <label>Price</label>

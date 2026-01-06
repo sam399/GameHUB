@@ -40,7 +40,7 @@ const ReviewStats: React.FC<ReviewStatsProps> = ({ stats, averageRating }) => {
         </div>
 
         <div className="rating-bars">
-          {stats.ratingDistribution.map(({ rating, count, percentage }) =>
+          {Array.isArray(stats.ratingDistribution) && stats.ratingDistribution.map(({ rating, count, percentage }) =>
             renderRatingBar(rating, count, percentage)
           )}
         </div>

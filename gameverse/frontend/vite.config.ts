@@ -1,6 +1,11 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
+// Use environment variable to determine backend target
+// Set VITE_USE_NETLIFY=true to use Netlify Dev (port 8888)
+// Otherwise uses local backend (port 5000)
+const useNetlify = process.env.VITE_USE_NETLIFY === 'true'
+
 export default defineConfig({
   plugins: [react()],
   build: {
@@ -21,13 +26,20 @@ export default defineConfig({
     host: '127.0.0.1',
     port: 5173,
     proxy: {
-      // Proxy for local development
-      '/api': {
-        target: 'http://localhost:8888',
-        changeOrigin: true,
-        secure: false,
-        rewrite: (path) => path.replace(/^\/api/, '/.netlify/functions/api')
-      }
+      '/api': useNetlify
+        ? {
+            // Netlify Dev proxy
+            target: 'http://localhost:8888',
+            changeOrigin: true,
+            secure: false,
+            rewrite: (path) => path.replace(/^\/api/, '/.netlify/functions/api')
+          }
+        : {
+            // Local backend proxy
+            target: 'http://localhost:5000',
+            changeOrigin: true,
+            secure: false
+          }
     }
   }
 })
