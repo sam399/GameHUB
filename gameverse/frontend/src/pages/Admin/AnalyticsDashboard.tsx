@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import api from '../../services/api';
+import AdminLayout from '../../components/admin/AdminLayout';
 import { 
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
   PieChart, Pie, Cell
@@ -28,10 +29,11 @@ const AnalyticsDashboard = () => {
     fetchStats();
   }, []);
 
-  if (loading) return <div className="text-white p-8">Loading Analytics...</div>;
-  if (error || !stats) return <div className="text-red-400 p-8">{error || 'Analytics unavailable'}</div>;
+  if (loading) return <AdminLayout><div className="text-white p-8">Loading Analytics...</div></AdminLayout>;
+  if (error || !stats) return <AdminLayout><div className="text-red-400 p-8">{error || 'Analytics unavailable'}</div></AdminLayout>;
 
   return (
+    <AdminLayout>
     <div className="p-6 space-y-8">
       <h2 className="text-3xl font-bold text-text-primary">System Analytics</h2>
 
@@ -100,6 +102,7 @@ const AnalyticsDashboard = () => {
 
       </div>
     </div>
+    </AdminLayout>
   );
 };
 

@@ -1,8 +1,45 @@
 .my-library {
   min-height: 100vh;
-  background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+  background: linear-gradient(135deg, var(--nexus-void-black) 0%, var(--nexus-midnight-blue) 100%);
+  background-attachment: fixed;
   padding: 2rem 0;
-  color: white;
+  color: var(--nexus-text-primary);
+  padding-top: 120px;
+  position: relative;
+  overflow-x: hidden;
+}
+
+.my-library::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50,10 L93.3,33.3 L93.3,80 L50,103.3 L6.7,80 L6.7,33.3 Z' fill='none' stroke='rgba(0, 247, 255, 0.15)' stroke-width='1'/%3E%3C/svg%3E");
+  background-size: 100px 100px;
+  background-repeat: repeat;
+  background-attachment: fixed;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.my-library::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 20% 50%, rgba(0, 247, 255, 0.05) 0%, transparent 50%),
+              radial-gradient(circle at 80% 80%, rgba(255, 0, 229, 0.05) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.my-library > * {
+  position: relative;
+  z-index: 1;
 }
 
 .my-library .container {
@@ -19,14 +56,13 @@
   font-size: 3rem;
   font-weight: bold;
   margin-bottom: 0.5rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: var(--nexus-text-primary);
+  text-shadow: 0 0 20px var(--nexus-cyan-glow);
 }
 
 .header-content .subtitle {
   font-size: 1.2rem;
-  color: #a0aec0;
+  color: var(--nexus-text-muted);
 }
 
 .library-stats {
@@ -37,24 +73,32 @@
 }
 
 .stat-card {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--nexus-surface);
+  border: 2px solid var(--nexus-border);
   border-radius: 12px;
   padding: 1.5rem;
   text-align: center;
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(var(--nexus-blur));
+  transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+  border-color: var(--nexus-cyan);
+  box-shadow: 0 0 20px var(--nexus-cyan-glow);
+  transform: translateY(-5px);
 }
 
 .stat-value {
   font-size: 2.5rem;
   font-weight: bold;
-  color: #667eea;
+  color: var(--nexus-cyan);
   margin-bottom: 0.5rem;
+  text-shadow: 0 0 10px var(--nexus-cyan-glow);
 }
 
 .stat-label {
   font-size: 0.9rem;
-  color: #a0aec0;
+  color: var(--nexus-text-muted);
   text-transform: uppercase;
   letter-spacing: 1px;
 }
@@ -64,9 +108,10 @@
   gap: 2rem;
   margin-bottom: 2rem;
   padding: 1.5rem;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--nexus-surface);
+  border: 2px solid var(--nexus-border);
   border-radius: 12px;
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(var(--nexus-blur));
 }
 
 .filters, .sort {
@@ -77,28 +122,28 @@
 
 .library-controls label {
   font-weight: 600;
-  color: #a0aec0;
+  color: var(--nexus-text-secondary);
 }
 
 .library-controls select {
   padding: 0.5rem 1rem;
   background: rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid var(--nexus-border);
   border-radius: 8px;
-  color: white;
+  color: var(--nexus-text-primary);
   font-size: 1rem;
   cursor: pointer;
   transition: all 0.3s;
 }
 
 .library-controls select:hover {
-  border-color: #667eea;
+  border-color: var(--nexus-cyan);
+  box-shadow: 0 0 10px var(--nexus-cyan-dim);
 }
 
 .library-controls select:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: var(--nexus-cyan);
 }
 
 .library-grid {
