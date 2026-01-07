@@ -87,13 +87,10 @@ app.get('/api', (req, res) => {
 const connectedUsers = new Map();
 
 io.on('connection', (socket) => {
-  console.log('New client connected:', socket.id);
-
   // User joins with their user ID
   socket.on('user_connected', async (userId) => {
     try {
       connectedUsers.set(userId, socket.id);
-      console.log(`User ${userId} connected with socket ${socket.id}`);
 
       // Join user to their personal room for private messages
       socket.join(`user_${userId}`);
@@ -103,7 +100,6 @@ io.on('connection', (socket) => {
         const user = await User.findById(userId).select('role');
         if (user && ['admin', 'moderator'].includes(user.role)) {
           socket.join('admin_room');
-          console.log(`Admin user ${userId} joined admin_room`);
         }
       } catch (err) {
         console.error('Error checking user role for admin room join:', err);
@@ -116,13 +112,11 @@ io.on('connection', (socket) => {
   // Join chat room
   socket.on('join_chat', (chatId) => {
     socket.join(`chat_${chatId}`);
-    console.log(`User joined chat: ${chatId}`);
   });
 
   // Leave chat room
   socket.on('leave_chat', (chatId) => {
     socket.leave(`chat_${chatId}`);
-    console.log(`User left chat: ${chatId}`);
   });
 
   // Send message
@@ -182,11 +176,9 @@ io.on('connection', (socket) => {
     for (let [userId, socketId] of connectedUsers.entries()) {
       if (socketId === socket.id) {
         connectedUsers.delete(userId);
-        console.log(`User ${userId} disconnected`);
         break;
       }
     }
-    console.log('Client disconnected:', socket.id);
   });
 });
 

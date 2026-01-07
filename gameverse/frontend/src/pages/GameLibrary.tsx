@@ -24,9 +24,7 @@ const GameLibrary: React.FC = () => {
   const loadGames = async () => {
     setLoading(true);
     try {
-      console.log('Loading games with filters:', filters);
       const response = await gameService.getGames(filters);
-      console.log('Games API response:', response);
 
       // API shape: { success, data: { games, totalPages, currentPage, total } }
       const data = response?.data ?? response;
@@ -38,7 +36,6 @@ const GameLibrary: React.FC = () => {
           currentPage: data.currentPage,
           total: data.total
         });
-        console.log('Successfully loaded games:', data.games.length);
       } else {
         console.error('Invalid response format:', response);
         setGames([]);

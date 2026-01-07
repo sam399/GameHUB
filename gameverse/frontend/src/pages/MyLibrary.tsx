@@ -145,7 +145,7 @@ const MyLibrary: React.FC = () => {
           </div>
         ) : (
           <div className="library-grid">
-            {library.map((item) => (
+            {library.filter(item => item.game).map((item) => (
               <div key={item._id} className="library-card">
                 <Link to={`/games/${item.game._id}`} className="card-image">
                   <img 

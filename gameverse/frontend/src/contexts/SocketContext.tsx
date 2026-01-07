@@ -76,7 +76,6 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
       });
 
       newSocket.on('connect', () => {
-        console.log('Connected to server');
         setIsConnected(true);
         
         // Register user with socket server
@@ -84,7 +83,6 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
       });
 
       newSocket.on('disconnect', () => {
-        console.log('Disconnected from server');
         setIsConnected(false);
       });
 
@@ -129,22 +127,18 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
     // Friend / social notifications: fetch persisted notifications when events happen
     const handleFriendRequest = (data: any) => {
       refreshNotifications();
-      console.log('Friend request received via socket', data);
     };
 
     const handleFriendAccepted = (data: any) => {
       refreshNotifications();
-      console.log('Friend request accepted via socket', data);
     };
 
     const handleFriendCancelled = (data: any) => {
       refreshNotifications();
-      console.log('Friend request cancelled via socket', data);
     };
 
     const handleFriendRemoved = (data: any) => {
       refreshNotifications();
-      console.log('Friend removed via socket', data);
     };
 
     const handleAchievementUnlocked = (data: any) => {
@@ -154,7 +148,6 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
     };
 
     const handleLeaderboardUpdated = (data: any) => {
-      console.log('Leaderboard updated', data);
       // Dispatch a browser event so leaderboard views can listen and refetch
       try {
         window.dispatchEvent(new CustomEvent('leaderboard.updated', { detail: data }));

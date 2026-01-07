@@ -25,7 +25,6 @@ const AdminDashboard: React.FC = () => {
     if (!socket) return;
 
     const onReportCreated = (data: any) => {
-      console.log('Admin dashboard: report.created', data);
       loadStats();
     };
 

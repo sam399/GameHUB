@@ -1,0 +1,267 @@
+/* Space Nova Font - Futuristic Display Typeface */
+/* Perfect for sci-fi, gaming, and cyber-fantasy themes */
+
+/* 
+ * SETUP REQUIRED:
+ * Place font files in: gameverse/frontend/public/fonts/
+ * Required files:
+ * - SpaceNova-Regular.woff2
+ * - SpaceNova-Italic.woff2 (optional)
+ * 
+ * Font Source: Maknastudio
+ * Available at: Creative Market, MyFonts, or similar marketplaces
+ */
+
+@font-face {
+  font-family: 'Space Nova';
+  src: url('/fonts/SpaceNova-Regular.woff2') format('woff2'),
+       url('/fonts/SpaceNova-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap; /* Improves performance */
+}
+
+@font-face {
+  font-family: 'Space Nova';
+  src: url('/fonts/SpaceNova-Italic.woff2') format('woff2'),
+       url('/fonts/SpaceNova-Italic.otf') format('opentype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* Space Nova Font Family Variable */
+:root {
+  --font-space-nova: 'Space Nova', 'Orbitron', 'Rajdhani', 'Exo 2', sans-serif;
+}
+
+/* ========================================
+   GLOBAL APPLICATION - Space Nova Everywhere
+   ======================================== */
+
+/* Apply Space Nova to ALL elements by default */
+* {
+  font-family: var(--font-space-nova) !important;
+  letter-spacing: 0 !important;
+}
+
+body,
+html,
+#root,
+.App {
+  font-family: var(--font-space-nova) !important;
+  letter-spacing: 0;
+  font-size: 0.95em;
+}
+
+/* All headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-space-nova) !important;
+  letter-spacing: 0.03em;
+  text-transform: none;
+  line-height: 1.2;
+}
+
+/* Paragraphs and text */
+p, span, div, a, li, label, input, textarea, select, button {
+  font-family: var(--font-space-nova) !important;
+  letter-spacing: 0 !important;
+}
+
+/* Form elements */
+input,
+textarea,
+select,
+button {
+  font-family: var(--font-space-nova) !important;
+  letter-spacing: 0;
+  font-size: 0.9em;
+}
+
+/* Buttons */
+button,
+.btn,
+.button {
+  font-family: var(--font-space-nova) !important;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  font-size: 0.9em;
+}
+
+/* Navigation */
+nav,
+.nav,
+.navbar,
+.nexus-navbar {
+  font-family: var(--font-space-nova) !important;
+  font-size: 0.95em;
+}
+
+.nav-link,
+.nexus-nav-link {
+  font-family: var(--font-space-nova) !important;
+  letter-spacing: 0.02em;
+  font-size: 0.9em;
+}
+
+/* Brand Text - GameVERSE Logo */
+.brand-text,
+.nexus-brand {
+  font-family: var(--font-space-nova) !important;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Cards */
+.card,
+.game-card,
+.card-title,
+.card-content,
+.card-header {
+  font-family: var(--font-space-nova) !important;
+  font-size: 0.95em;
+}
+
+/* Game Titles */
+.game-title,
+.game-card-title,
+.game-name {
+  font-family: var(--font-space-nova) !important;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  font-size: 1em;
+}
+
+/* Stats & Numbers */
+.stat,
+.stat-value,
+.stat-label,
+.stat-number,
+.score,
+.score-display {
+  font-family: var(--font-space-nova) !important;
+  letter-spacing: 0;
+  font-size: 0.95em;
+}
+
+/* Achievements */
+.achievement,
+.achievement-title,
+.achievement-description,
+.badge,
+.badge-text,
+.medal-text {
+  font-family: var(--font-space-nova) !important;
+  font-size: 0.9em;
+}
+
+/* Leaderboards */
+.leaderboard,
+.leaderboard-title,
+.leaderboard-entry,
+.leaderboard-rank,
+.rank-number,
+.player-name {
+  font-family: var(--font-space-nova) !important;
+  letter-spacing: 0;
+  font-size: 0.95em;
+}
+
+/* Modals & Dialogs */
+.modal,
+.modal-title,
+.modal-content,
+.dialog,
+.dialog-title,
+.dialog-content {
+  font-family: var(--font-space-nova) !important;
+  font-size: 0.95em;
+}
+
+/* Tabs */
+.tab,
+.tab-title,
+.tab-label,
+.tab-content {
+  font-family: var(--font-space-nova) !important;
+  letter-spacing: 0.02em;
+  font-size: 0.9em;
+}
+
+/* Admin Panel */
+.admin,
+.admin-section,
+.admin-section-title,
+.admin-panel,
+.dashboard,
+.dashboard-title {
+  font-family: var(--font-space-nova) !important;
+  font-size: 0.95em;
+}
+
+/* Tables */
+table,
+th,
+td,
+.table {
+  font-family: var(--font-space-nova) !important;
+  font-size: 0.9em;
+}
+
+/* Lists */
+ul, ol, li {
+  font-family: var(--font-space-nova) !important;
+  font-size: 0.95em;
+}
+
+/* Profile */
+.profile,
+.profile-name,
+.username,
+.user-info {
+  font-family: var(--font-space-nova) !important;
+  font-size: 0.95em;
+}
+
+/* Wishlist & Library */
+.wishlist,
+.library,
+.my-games,
+.my-wishlist,
+.my-library {
+  font-family: var(--font-space-nova) !important;
+  font-size: 0.95em;
+}
+
+/* Notifications */
+.notification,
+.notification-title,
+.notification-message,
+.alert {
+  font-family: var(--font-space-nova) !important;
+  font-size: 0.9em;
+}
+
+/* Search */
+.search,
+.search-bar,
+.search-input,
+.search-results {
+  font-family: var(--font-space-nova) !important;
+  font-size: 0.95em;
+}
+
+/* Filters */
+.filter,
+.filter-label,
+.filter-option {
+  font-family: var(--font-space-nova) !important;
+  font-size: 0.9em;
+}
+
+/* Footer */
+.footer,
+footer {
+  font-family: var(--font-space-nova) !important;
+  font-size: 0.9em;
+}
