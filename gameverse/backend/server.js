@@ -185,20 +185,21 @@ io.on('connection', (socket) => {
 // Make io accessible to routes
 app.set('io', io);
 
-// MongoDB connection
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/gameverse';
-
-mongoose.connect(MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-.then(() => console.log('✅ MongoDB connected successfully'))
-.catch(err => console.log('❌ MongoDB connection error:', err));
+// MongoDB connection (skipped in tests; tests manage their own connection)
+if (process.env.NODE_ENV !== 'test') {
+  const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/gameverse';
+  mongoose.connect(MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log('✅ MongoDB connected successfully'))
+  .catch(err => console.log('❌ MongoDB connection error:', err));
+}
 
 const PORT = process.env.PORT || 5000;
 
-// Only listen if not in serverless environment (Vercel)
-if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+// Only listen if not in serverless environment (Vercel) and not under tests
+if (process.env.NODE_ENV !== 'test' && (process.env.NODE_ENV !== 'production' || !process.env.VERCEL)) {
   server.listen(PORT, () => {
     console.log(`🚀 Server is running on http://localhost:${PORT}`);
   });
